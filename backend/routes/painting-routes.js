@@ -14,13 +14,13 @@ module.exports = app => {
   // retrieve all paintings on Shop
   router.get("/onshop", paintings.findAllOnShop);
 
-  // Update a painting by id
+  // update a painting by id
   router.put("/:id", paintings.update);
 
-  // Delete a painting by id
+  // delete a painting by id
   router.delete("/:id", paintings.delete);
 
-  // Delete all paintings
+  // delete all paintings
   router.delete("/", paintings.deleteAll);
 
   app.use("/paintings", router);
