@@ -32,6 +32,9 @@ db.mongoose
     process.exit();
   });
 
+// routes
+require("./routes/painting-routes.js")(app);
+
 // simple message
 app.get("/", (req, res) => {
   res.json({ message: "Welcome to the application." });
