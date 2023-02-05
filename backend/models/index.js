@@ -1,6 +1,7 @@
 const dbConfig = require("../config/database.js");
 
 const mongoose = require("mongoose");
+mongoose.set("strictQuery", false);
 mongoose.Promise = global.Promise;
 
 const db = {};

@@ -1,8 +1,8 @@
-module.exports = (mongoose) => {
+module.exports = mongoose => {
   // schema
   let schema = mongoose.Schema(
     {
-      collection: String,
+      group: String,
       creator: String,
       description: String,
       onShop: Boolean,
@@ -19,6 +19,5 @@ module.exports = (mongoose) => {
   });
   // model
   const Painting = mongoose.model("painting", schema);
-  
   return Painting;
 };

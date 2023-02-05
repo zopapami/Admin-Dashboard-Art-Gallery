@@ -14,6 +14,9 @@ const cors = require("cors");
 let corsOptions = { origin: "http://localhost:9091" };
 app.use(cors(corsOptions));
 
+// dotenv
+require("dotenv").config();
+
 // database
 const db = require("./models");
 db.mongoose
@@ -35,8 +38,8 @@ app.get("/", (req, res) => {
 });
 
 // set port
-const PORT = process.env.PORT;
+const port = process.env.SERVER_PORT;
 // listen for requests
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}...`);
+app.listen(port, () => {
+  console.log(`Server is running on port ${port}...`);
 });
