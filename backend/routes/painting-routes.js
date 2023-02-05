@@ -1,27 +1,27 @@
 module.exports = app => {
-  const paintings = require("../controllers/painting-controller.js");
   let router = require("express").Router();
+  const paintings = require("../controllers/painting-controller.js");
 
-  // Create a new Tutorial
-  router.post("/", tutorials.create);
+  // create a painting
+  router.post("/", paintings.create);
 
-  // Retrieve all Tutorials
-  router.get("/", tutorials.findAll);
+  // retrieve a painting by id
+  router.get("/:id", paintings.findOne);
 
-  // Retrieve all published Tutorials
-  router.get("/published", tutorials.findAllPublished);
+  // retrieve all paintings
+  router.get("/", paintings.findAll);
 
-  // Retrieve a single Tutorial with id
-  router.get("/:id", tutorials.findOne);
+  // retrieve all paintings on Shop
+  router.get("/onshop", paintings.findAllOnShop);
 
-  // Update a Tutorial with id
-  router.put("/:id", tutorials.update);
+  // Update a painting by id
+  router.put("/:id", paintings.update);
 
-  // Delete a Tutorial with id
-  router.delete("/:id", tutorials.delete);
+  // Delete a painting by id
+  router.delete("/:id", paintings.delete);
 
-  // Delete all Tutorials
-  router.delete("/", tutorials.deleteAll);
+  // Delete all paintings
+  router.delete("/", paintings.deleteAll);
 
-  app.use('/api/tutorials', router);
+  app.use("/paintings", router);
 };
