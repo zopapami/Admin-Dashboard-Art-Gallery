@@ -1,0 +1,51 @@
+/* ---------- Fonts ------------------------------------------------------ */
+@import url("https://fonts.googleapis.com/css2?family=GFS+Neohellenic&display=swap");
+
+/* ---------- Variables -------------------------------------------------- */
+:root {
+  --main-dark: #2a2a31;
+  --main-light: #ffffff;
+}
+/* ----------------------------------------------------------------------- */
+
+body,
+html {
+  color: var(--main-dark);
+  font-family: "GFS Neohellenic";
+  margin: 0 auto;
+}
+
+.bg-dark {
+  background-color: var(--main-dark);
+}
+.border-bottom {
+  border-bottom: solid 1px var(--main-dark);
+}
+.center-content {
+  justify-content: center;
+}
+.center-text {
+  text-align: center;
+}
+.color-light {
+  color: var(--main-light);
+}
+.flex {
+  display: flex;
+}
+.no-underline {
+  text-decoration: none;
+}
+.padding-10 {
+  padding: 10px;
+}
+.padding-20 {
+  padding: 20px;
+}
+.position-bottom {
+  bottom: 0;
+  position: absolute;
+}
+.width-100 {
+  width: 100%;
+}
