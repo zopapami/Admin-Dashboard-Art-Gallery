@@ -2,26 +2,29 @@ module.exports = app => {
   let router = require("express").Router();
   const paintings = require("../controllers/painting-controller.js");
 
-  // create a painting
+  // create a new Painting
   router.post("/", paintings.create);
 
-  // retrieve a painting by id
+  // retrieve a Painting by id
   router.get("/:id", paintings.findOne);
 
-  // retrieve all paintings
+  // retrieve all Paintings
   router.get("/", paintings.findAll);
 
-  // retrieve all paintings on Shop
-  router.get("/onshop", paintings.findAllOnShop);
+  // retrieve all Paintings in category (art collection)
+  router.get("/:category", paintings.findAllInCategory);
 
-  // update a painting by id
+  // retrieve all Paintings on Shop
+  router.get("/shop", paintings.findAllOnShop);
+
+  // update a Painting by id
   router.put("/:id", paintings.update);
 
-  // delete a painting by id
+  // delete a Painting by id
   router.delete("/:id", paintings.delete);
 
-  // delete all paintings
+  // delete all Paintings
   router.delete("/", paintings.deleteAll);
 
-  app.use("/paintings", router);
+  app.use("/", router);
 };

@@ -2,7 +2,7 @@ module.exports = mongoose => {
   // schema
   let schema = mongoose.Schema(
     {
-      group: String,
+      category: String,
       creator: String,
       description: String,
       onShop: Boolean,

@@ -10,7 +10,7 @@ exports.create = (req, res) => {
   };
   // create
   const painting = new Painting({
-    group: req.body.group,
+    category: req.body.category,
     creator: req.body.creator,
     description: req.body.description,
     onShop: req.body.onShop ? req.body.onShop : false,
@@ -56,6 +56,19 @@ exports.findAll = (req, res) => {
     })
     .catch((err) => {
       res.status(500).send({ message: "500 Internal Server Error while retrieving all paintings." }, err);
+    });
+};
+
+// retrieve all Paintings in category (art collection)
+exports.findAllInCategory = (req, res) => {
+  const category = req.params.category;
+  let condition = category ? { category: { $regex: new RegExp(category), $options: "i" } } : {};
+  Painting.find(condition)
+    .then((data) => {
+      res.send(data);
+    })
+    .catch((err) => {
+      res.status(500).send({ message: `500 Internal Server Error while retrieving all paintings in collection: ${category}.` }, err);
     });
 };
 
