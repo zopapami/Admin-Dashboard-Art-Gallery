@@ -1,45 +1,39 @@
 import http from "./http-service.js";
 
-  // create a painting
+  // create a new Painting
   const create = (data) => {
     return http.post("/paintings", data);
   };
 
-  // retrieve a painting by id
+  // retrieve a Painting by id
   const get = (id) => {
     return http.get(`/paintings/${id}`);
   };
 
-  // retrieve all paintings
+  // retrieve all Paintings
   const getAll = () => {
     return http.get("/paintings");
   };
 
-  // retrieve all paintings on Shop
-  const getAllOnShop = () => {
-    return http.get("/paintings");
-  };
-
-  // update a painting by id
+  // update a Painting by id
   const update = (id, data) => {
     return http.put(`/paintings/${id}`, data);
   };
 
-  // delete a painting by id
+  // delete a Painting by id
   const remove = (id) => {
     return http.delete(`/paintings/${id}`);
   };
 
-  // delete all paintings
+  // delete all Paintings
   const removeAll = () => {
-    return http.delete(`/paintings`);
+    return http.delete("/paintings");
   };
 
 const PaintingService = {
   create,
   get,
   getAll,
-  getAllOnShop,
   update,
   remove,
   removeAll
