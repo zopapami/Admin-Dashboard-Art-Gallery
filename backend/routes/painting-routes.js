@@ -1,21 +1,16 @@
 module.exports = app => {
-  let router = require("express").Router();
+  const router = require("express").Router();
   const paintings = require("../controllers/painting-controller.js");
 
+  /* ---------- Admin Content ---------------------------------------- */
   // create a new Painting
   router.post("/", paintings.create);
-
-  // retrieve a Painting by id
-  router.get("/:id", paintings.findOne);
 
   // retrieve all Paintings
   router.get("/", paintings.findAll);
 
-  // retrieve all Paintings in category (art collection)
-  router.get("/:category", paintings.findAllInCategory);
-
-  // retrieve all Paintings on Shop
-  router.get("/shop", paintings.findAllOnShop);
+  // retrieve a Painting by id
+  router.get("/:id", paintings.findOne);
 
   // update a Painting by id
   router.put("/:id", paintings.update);
@@ -26,5 +21,5 @@ module.exports = app => {
   // delete all Paintings
   router.delete("/", paintings.deleteAll);
 
-  app.use("/", router);
+  app.use("/tcgallery/admin/paintings", router);
 };

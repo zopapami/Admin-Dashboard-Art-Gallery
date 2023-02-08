@@ -28,6 +28,17 @@ exports.create = (req, res) => {
     });
 };
 
+// retrieve all Paintings
+exports.findAll = (req, res) => {
+  Painting.find()
+    .then((data) => {
+      res.send(data);
+    })
+    .catch((err) => {
+      res.status(500).send({ message: "500 Internal Server Error while retrieving all paintings." }, err);
+    });
+};
+
 // retrieve a Painting by id
 exports.findOne = (req, res) => {
   // get id
@@ -44,43 +55,6 @@ exports.findOne = (req, res) => {
     .catch((err) => {
       res.status(500).send({ message: `500 Internal Server Error while retrieving Painting with id: ${id}.` }, err);
     });
-};
-
-// retrieve all Paintings
-exports.findAll = (req, res) => {
-  const title = req.query.title;
-  let condition = title ? { title: { $regex: new RegExp(title), $options: "i" } } : {};
-  Painting.find(condition)
-    .then((data) => {
-      res.send(data);
-    })
-    .catch((err) => {
-      res.status(500).send({ message: "500 Internal Server Error while retrieving all paintings." }, err);
-    });
-};
-
-// retrieve all Paintings in category (art collection)
-exports.findAllInCategory = (req, res) => {
-  const category = req.params.category;
-  let condition = category ? { category: { $regex: new RegExp(category), $options: "i" } } : {};
-  Painting.find(condition)
-    .then((data) => {
-      res.send(data);
-    })
-    .catch((err) => {
-      res.status(500).send({ message: `500 Internal Server Error while retrieving all paintings in collection: ${category}.` }, err);
-    });
-};
-
-// retrieve all Paintings on Shop
-exports.findAllOnShop = (req, res) => {
-  Painting.find({ onShop: true })
-  .then((data) => {
-    res.send(data);
-  })
-  .catch((err) => {
-    res.status(500).send({ message: "500 Internal Server Error while retrieving paintings on Shop." }, err);
-  });
 };
 
 // update a Painting by id
