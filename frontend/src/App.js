@@ -1,7 +1,7 @@
 import React from "react";
 import { Link, Route, Routes } from "react-router-dom";
 // CSS
-//import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 // Components
 import Home from "./components/Home.js";
@@ -14,33 +14,35 @@ import Shop from "./components/Shop.js";
 function App() {
   return (
     <div>
-      <div className="center-text padding-20">
-        <Link to="/" className="no-underline">TAKIS CHATSIOS GALLERY</Link>
-      </div>
-      <nav className="border-bottom center-content flex">
-        <div className="padding-20">
-          <Link to="/" className="no-underline">HOME</Link>
-        </div>
-        <div className="padding-20">
-          <Link to={"/gallery"} className="no-underline">GALLERY</Link>
-        </div>
-        <div className="padding-20">
-          <Link to={"/events"} className="no-underline">EVENTS</Link>
-        </div>
-        <div className="padding-20">
-          <Link to={"/bio"} className="no-underline">BIO</Link>
-        </div>
-        <div className="padding-20">
-          <Link to={"/contact"} className="no-underline">CONTACT</Link>
-        </div>
-        <div className="padding-20">
-          |
-        </div>
-        <div className="padding-20">
-          <Link to={"/shop"} className="no-underline">SHOP</Link>
+      {/*---------- Logo ----------------------------------------*/}
+      <nav className="navbar navbar-expand justify-content-center">
+        <Link to="/" className="navbar-brand">TAKIS CHATSIOS GALLERY</Link>
+      </nav>
+      {/*---------- Menu ----------------------------------------*/}
+      <nav className="navbar navbar-expand justify-content-center">
+        <div className="navbar-nav mr-auto">
+          <li className="nav-item">
+            <Link to={"/"} className="nav-link">HOME</Link>
+          </li>
+          <li className="nav-item">
+            <Link to={"/gallery"} className="nav-link">GALLERY</Link>
+          </li>
+          <li className="nav-item">
+            <Link to={"/events"} className="nav-link">EVENTS</Link>
+          </li>
+          <li className="nav-item">
+            <Link to={"/bio"} className="nav-link">BIO</Link>
+          </li>
+          <li className="nav-item">
+            <Link to={"/contact"} className="nav-link">CONTACT</Link>
+          </li>
+          <li className="nav-item">
+            <Link to={"/shop"} className="nav-link">SHOP</Link>
+          </li>
         </div>
       </nav>
-      <div>
+      {/*---------- Routes --------------------------------------*/}
+      <div className="container mt-3">
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/gallery" element={<Gallery />} />
@@ -50,9 +52,6 @@ function App() {
           <Route path="/shop" element={<Shop />} />
         </Routes>
       </div>
-      <footer className="bg-dark color-light padding-10 position-bottom width-100">
-        Footer
-      </footer>
     </div>
   );
 };
