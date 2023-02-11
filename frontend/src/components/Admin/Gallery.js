@@ -1,11 +1,11 @@
 import React from "react";
 
-function Bio() {
+function Gallery() {
   return (
     <div>
-      Bio
+      Gallery
     </div>
   );
 };
 
-export default Bio;
+export default Gallery;

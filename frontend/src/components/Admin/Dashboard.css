@@ -1,0 +1,9 @@
+.bg-main-dark {
+  background-color: var(--main-dark);
+}
+.c-main-light {
+  color: var(--main-light);
+}
+.h {
+  height: 100vh;
+}

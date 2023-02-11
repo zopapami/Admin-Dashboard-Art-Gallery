@@ -9,7 +9,6 @@
 /* ------------------------------------------------------------------------- */
 body,
 html {
-  color: var(--main-dark);
   font-family: "GFS Neohellenic";
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;

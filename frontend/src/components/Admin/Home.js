@@ -1,11 +1,11 @@
 import React from "react";
 
-function Events() {
+function Home() {
   return (
     <div>
-      Events
+      Home
     </div>
   );
 };
 
-export default Events;
+export default Home;
