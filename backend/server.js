@@ -33,7 +33,8 @@ db.mongoose
   });
 
 // routes
-require("./routes/painting-routes.js")(app);
+require("./routes/artwork-routes.js")(app);
+require("./routes/collection-routes.js")(app);
 
 // simple message
 app.get("/", (req, res) => {

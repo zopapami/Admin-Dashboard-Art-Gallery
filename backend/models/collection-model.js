@@ -2,12 +2,9 @@ module.exports = mongoose => {
   // schema
   let schema = mongoose.Schema(
     {
-      category: String,
-      creator: String,
       description: String,
-      onShop: Boolean,
+      imageURL: String,
       title: String,
-      year: Number
     },
     { timestamps: true }
   );
@@ -18,6 +15,6 @@ module.exports = mongoose => {
     return object;
   });
   // model
-  const Painting = mongoose.model("painting", schema);
-  return Painting;
+  const Collection = mongoose.model("collection", schema);
+  return Collection;
 };
