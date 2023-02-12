@@ -1,34 +1,34 @@
 import http from "./http-service.js";
 
-  // create a new Artwork
-  const create = (data) => {
-    return http.post("/artworks", data);
-  };
+// create a new Artwork
+const create = (data) => {
+  return http.post("/gallery/artworks", data);
+};
 
-  // retrieve a Artwork by id
-  const get = (id) => {
-    return http.get(`/artworks/${id}`);
-  };
+// retrieve all Artworks
+const getAll = () => {
+  return http.get("/gallery/artworks");
+};
 
-  // retrieve all Artworks
-  const getAll = () => {
-    return http.get("/artworks");
-  };
+// retrieve a Artwork by id
+const get = (id) => {
+  return http.get(`/gallery/artworks/${id}`);
+};
 
-  // update a Artwork by id
-  const update = (id, data) => {
-    return http.put(`/artworks/${id}`, data);
-  };
+// update a Artwork by id
+const update = (id, data) => {
+  return http.put(`/gallery/artworks/${id}`, data);
+};
 
-  // delete a Artwork by id
-  const remove = (id) => {
-    return http.delete(`/artworks/${id}`);
-  };
+// delete a Artwork by id
+const remove = (id) => {
+  return http.delete(`/gallery/artworks/${id}`);
+};
 
-  // delete all Artworks
-  const removeAll = () => {
-    return http.delete("/artworks");
-  };
+// delete all Artworks
+const removeAll = () => {
+  return http.delete("/gallery/artworks");
+};
 
 const ArtworkService = {
   create,
