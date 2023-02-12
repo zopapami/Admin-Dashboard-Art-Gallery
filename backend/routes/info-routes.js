@@ -1,0 +1,12 @@
+module.exports = app => {
+  const router = require("express").Router();
+  const info = require("../controllers/info-controller.js");
+
+  // retrieve Info
+  router.get("/", info.findAll);
+
+  // update Info
+  router.put("/:id", info.update);
+
+  app.use("/dashboard/info", router);
+};

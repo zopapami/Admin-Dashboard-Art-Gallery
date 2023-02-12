@@ -5,7 +5,7 @@ const Artwork = db.artworks;
 exports.create = (req, res) => {
   // validate request
   if (!req.body.title) {
-    res.status(400).send({ message: "400 Bad Request. Content cannot be empty!" });
+    res.status(400).send({ message: "400 Bad Request. Title cannot be empty!" });
     return;
   };
   // create

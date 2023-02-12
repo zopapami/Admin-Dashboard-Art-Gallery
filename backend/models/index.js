@@ -9,5 +9,6 @@ db.mongoose = mongoose;
 db.url = dbConfig.url;
 db.artworks = require("./artwork-model.js")(mongoose);
 db.collections = require("./collection-model.js")(mongoose);
+db.infos = require("./info-model.js")(mongoose);
 
 module.exports = db;
