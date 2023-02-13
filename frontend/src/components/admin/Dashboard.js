@@ -1,7 +1,5 @@
 import React from "react";
 import { Link, Route, Routes } from "react-router-dom";
-// CSS
-import "./Dashboard.css";
 // Components
 import Home from "./Home.js";
 import Gallery from "./Gallery.js";
@@ -9,28 +7,29 @@ import Info from "./Info.js";
 
 function Dashboard() {
   return (
-    <div>
-      <nav className="navbar navbar-expand navbar-dark bg-dark">
-        <a href="/dashboard" className="navbar-brand">
-          DASHBOARD
-        </a>
-        <div className="navbar-nav mr-auto">
-          <li className="nav-item">
-            <Link to="home" className="nav-link">
-              HOME
-            </Link>
-          </li>
-          <li className="nav-item">
-            <Link to="gallery" className="nav-link">
-              GALLERY
-            </Link>
-          </li>
-          <li className="nav-item">
-            <Link to="info" className="nav-link">
-              INFO
-            </Link>
-          </li>
-        </div>
+    <div className="d-flex h100">
+      <nav className="navbar-nav navbar-dark bg-dark mr-auto p-4">
+        <li className="nav-item">
+          <a href="dashboard" className="navbar-brand">
+            DASHBOARD
+          </a>
+        </li>
+        <br></br>
+        <li className="nav-item">
+          <Link to="home" className="nav-link">
+            HOME
+          </Link>
+        </li>
+        <li className="nav-item">
+          <Link to="gallery/artworks" className="nav-link">
+            GALLERY
+          </Link>
+        </li>
+        <li className="nav-item">
+          <Link to="info" className="nav-link">
+            INFO
+          </Link>
+        </li>
       </nav>
       <div>
         <Routes>

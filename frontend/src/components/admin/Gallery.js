@@ -6,8 +6,9 @@ import CollectionsLibrary from "./collection/CollectionsLibrary.js";
 
 function Gallery() {
   return (
-    <div>
-      <nav className="navbar navbar-expand navbar-dark bg-dark">
+    <div className="h100 w100">
+      <h3>GALLERY</h3>
+      <nav className="navbar navbar-expand navbar-dark bg-secondary">
         <div className="navbar-nav mr-auto">
           <li className="nav-item">
             <Link to="artworks" className="nav-link">
