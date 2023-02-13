@@ -1,9 +1,15 @@
-.bg-main-dark {
-  background-color: var(--main-dark);
+.list {
+  text-align: left;
+  max-width: 750px;
+  margin: auto;
 }
-.c-main-light {
-  color: var(--main-light);
+
+.submit-form {
+  max-width: 300px;
+  margin: auto;
 }
-.h {
-  height: 100vh;
+
+.edit-form {
+  max-width: 300px;
+  margin: auto;
 }

@@ -3,7 +3,7 @@ import React from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 // Components
-import Dashboard from "./components/Admin/Dashboard.js";
+import Dashboard from "./components/admin/Dashboard.js";
 
 function App() {
   return (

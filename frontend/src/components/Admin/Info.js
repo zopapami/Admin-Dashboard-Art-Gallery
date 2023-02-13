@@ -6,6 +6,6 @@ function Info() {
       Info
     </div>
   );
-};
+}
 
 export default Info;
