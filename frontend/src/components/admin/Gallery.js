@@ -12,12 +12,12 @@ function Gallery() {
         <div className="navbar-nav mr-auto">
           <li className="nav-item">
             <Link to="artworks" className="nav-link">
-              Artworks
+              ARTWORKS
             </Link>
           </li>
           <li className="nav-item">
             <Link to="collections" className="nav-link">
-              Collections
+              COLLECTIONS
             </Link>
           </li>
         </div>

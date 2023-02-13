@@ -47,7 +47,7 @@ const ArtworksLibrary = () => {
   return (
     <div className="list row">
       <div className="col-md-6">
-        <h4>Artworks Library</h4>
+        <h4>ARTWORKS LIBRARY</h4>
 
         <ul className="list-group">
           {artworks &&
