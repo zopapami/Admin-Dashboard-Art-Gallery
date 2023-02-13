@@ -6,8 +6,8 @@ const getAll = () => {
 };
 
 // update Info (by id)
-const update = (id, data) => {
-  return http.put(`/info/${id}`, data);
+const update = (data) => {
+  return http.put("/info", data);
 };
 
 const InfoService = {

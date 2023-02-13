@@ -7,8 +7,8 @@ import CollectionsLibrary from "./collection/CollectionsLibrary.js";
 function Gallery() {
   return (
     <div className="h100 w100">
-      <h3>GALLERY</h3>
-      <nav className="navbar navbar-expand navbar-dark bg-secondary">
+      <h3 className="px-4 pt-4 pb-2">GALLERY</h3>
+      <nav className="navbar navbar-expand navbar-dark bg-secondary px-3">
         <div className="navbar-nav mr-auto">
           <li className="nav-item">
             <Link to="artworks" className="nav-link">
@@ -22,7 +22,7 @@ function Gallery() {
           </li>
         </div>
       </nav>
-      <div>
+      <div className="p-4">
         <Routes>
           <Route path="artworks" element={<ArtworksLibrary />} />
           <Route path="collections" element={<CollectionsLibrary />} />

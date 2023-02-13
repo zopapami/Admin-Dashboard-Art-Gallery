@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
 import ArtworkService from "../../../services/artwork-service.js";
 import { Link } from "react-router-dom";
+import Popup from 'reactjs-popup';
+import 'reactjs-popup/dist/index.css';
+import ArtworkAdd from "./ArtworkAdd.js";
 
 const ArtworksLibrary = () => {
   const [artworks, setArtworks] = useState([]);
@@ -50,6 +53,11 @@ const ArtworksLibrary = () => {
         <h4>ARTWORKS LIBRARY</h4>
 
         <ul className="list-group">
+
+          <Popup trigger={<button className="btn bg-secondary">+</button>} position="right center">
+            <div><ArtworkAdd /></div>
+          </Popup>
+          
           {artworks &&
             artworks.map((artwork, index) => (
               <li
@@ -72,7 +80,7 @@ const ArtworksLibrary = () => {
         </button>
       </div>
       <div className="col-md-6">
-        {currentArtwork ? (
+        {currentArtwork && (
           <div>
             <h4>Artwork</h4>
             <div>
@@ -94,11 +102,6 @@ const ArtworksLibrary = () => {
             >
               Edit
             </Link>
-          </div>
-        ) : (
-          <div>
-            <br />
-            <p>Please click on a Artwork...</p>
           </div>
         )}
       </div>

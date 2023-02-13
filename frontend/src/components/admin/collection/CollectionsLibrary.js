@@ -72,7 +72,7 @@ const ArtworksLibrary = () => {
         </button>
       </div>
       <div className="col-md-6">
-        {currentArtwork ? (
+        {currentArtwork && (
           <div>
             <h4>Artwork</h4>
             <div>
@@ -94,11 +94,6 @@ const ArtworksLibrary = () => {
             >
               Edit
             </Link>
-          </div>
-        ) : (
-          <div>
-            <br />
-            <p>Please click on a Artwork...</p>
           </div>
         )}
       </div>

@@ -1,11 +1,155 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import InfoService from "../../services/info-service.js";
 
 function Info() {
+  const initialInfoState = {
+    address: "",
+    bio: "",
+    email: "",
+    facebook: "",
+    imageURL: "",
+    instagram: "",
+    name: "",
+    phone: ""
+  };
+  const [info, setInfo] = useState(initialInfoState);
+  const [message, setMessage] = useState("");
+
+  const retrieveInfo = () => {
+    InfoService.getAll()
+      .then(response => {
+        setInfo(response.data);
+        console.log(response.data);
+      })
+      .catch(e => {
+        console.log(e);
+      });
+  };
+
+  useEffect(() => {
+    retrieveInfo();
+  }, []);
+
+  const handleInputChange = event => {
+    const { name, value } = event.target;
+    setInfo({ ...info, [name]: value });
+  };
+
+  const updateInfo = () => {
+    InfoService.update(info)
+      .then(response => {
+        console.log(response.data);
+        setMessage("Info was updated successfully!");
+      })
+      .catch(e => {
+        console.log(e);
+      });
+  };
+
   return (
-    <div>
-      Infoooooooooooooooooooooooo
+    <div className="h100 p-4">
+    <h4>INFO</h4>
+    <form>
+      <div className="form-group">
+        <label htmlFor="name">Display Name</label>
+        <input
+          type="text"
+          className="form-control"
+          id="name"
+          name="name"
+          value={info.name}
+          onChange={handleInputChange}
+        />
+      </div>
+      <div className="form-group">
+        <label htmlFor="email">Email Address</label>
+        <input
+          type="text"
+          className="form-control"
+          id="email"
+          name="email"
+          value={info.email}
+          onChange={handleInputChange}
+        />
+      </div>
+      <div className="form-group">
+        <label htmlFor="phone">Phone Number</label>
+        <input
+          type="text"
+          className="form-control"
+          id="phone"
+          name="phone"
+          value={info.phone}
+          onChange={handleInputChange}
+        />
+      </div>
+      <div className="form-group">
+        <label htmlFor="address">Gallery Address</label>
+        <input
+          type="text"
+          className="form-control"
+          id="address"
+          name="address"
+          value={info.address}
+          onChange={handleInputChange}
+        />
+      </div>
+      <div className="form-group">
+        <label htmlFor="facebook">Facebook</label>
+        <input
+          type="text"
+          className="form-control"
+          id="facebook"
+          name="facebook"
+          value={info.facebook}
+          onChange={handleInputChange}
+        />
+      </div>
+      <div className="form-group">
+        <label htmlFor="instagram">Instagram</label>
+        <input
+          type="text"
+          className="form-control"
+          id="instagram"
+          name="instagram"
+          value={info.instagram}
+          onChange={handleInputChange}
+        />
+      </div>
+      <div className="form-group">
+        <label htmlFor="imageURL">Profile Image</label>
+        <input
+          type="text"
+          className="form-control"
+          id="imageURL"
+          name="imageURL"
+          value={info.imageURL}
+          onChange={handleInputChange}
+        />
+      </div>
+      <div className="form-group">
+        <label htmlFor="bio">Bio</label>
+        <input
+          type="text"
+          className="form-control"
+          id="bio"
+          name="bio"
+          value={info.bio}
+          onChange={handleInputChange}
+        />
+      </div>
+    </form>
+
+    <button
+      type="submit"
+      className="btn btn-success"
+      onClick={updateInfo}
+    >
+      Save Changes
+    </button>
+    <p>{message}</p>
     </div>
   );
-}
+};
 
 export default Info;
