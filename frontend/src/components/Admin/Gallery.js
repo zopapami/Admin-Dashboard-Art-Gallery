@@ -1,20 +1,32 @@
 import React from "react";
 import { Link, Route, Routes } from "react-router-dom";
+// Components
+import ArtworksLibrary from "./artwork/ArtworksLibrary.js";
+import CollectionsLibrary from "./collection/CollectionsLibrary.js";
 
 function Gallery() {
   return (
     <div>
-      {/*---------- Navbar --------------------------------------*/}
-      <nav className="navbar navbar-expand navbar-dark bg-secondary">
+      <nav className="navbar navbar-expand navbar-dark bg-dark">
         <div className="navbar-nav mr-auto">
           <li className="nav-item">
-            <Link to={"/dashboard/gallery/artworks"} className="nav-link">Artworks</Link>
+            <Link to="artworks" className="nav-link">
+              Artworks
+            </Link>
           </li>
           <li className="nav-item">
-            <Link to={"/dashboard/gallery/collections"} className="nav-link">Collections</Link>
+            <Link to="collections" className="nav-link">
+              Collections
+            </Link>
           </li>
         </div>
       </nav>
+      <div>
+        <Routes>
+          <Route path="artworks" element={<ArtworksLibrary />} />
+          <Route path="collections" element={<CollectionsLibrary />} />
+        </Routes>
+      </div>
     </div>
   );
 }

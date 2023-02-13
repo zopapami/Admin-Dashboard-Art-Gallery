@@ -1,4 +1,5 @@
 import React from "react";
+import { Route, Routes } from "react-router-dom";
 // CSS
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
@@ -8,7 +9,9 @@ import Dashboard from "./components/admin/Dashboard.js";
 function App() {
   return (
     <div>
-      <Dashboard />
+      <Routes>
+        <Route path="dashboard/*" element={<Dashboard />} ></Route>
+      </Routes>
     </div>
   );
 };
