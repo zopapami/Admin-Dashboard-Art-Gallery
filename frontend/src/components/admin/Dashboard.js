@@ -1,11 +1,28 @@
 import React from "react";
 import { Link, Route, Routes } from "react-router-dom";
+// Firebase
+import { signOut } from "firebase/auth";
+// Services
+import FirebaseService from "../../services/firebase-service.js";
 // Components
 import Home from "./Home.js";
 import Gallery from "./Gallery.js";
 import Info from "./Info.js";
 
 function Dashboard() {
+
+  // Logout
+  const handleLogout = () => {
+    signOut(FirebaseService.auth)
+      .then(() => {
+        return;
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  // Render
   return (
     <div className="d-flex h100">
       <nav className="navbar-nav navbar-dark bg-dark mr-auto p-4">
@@ -30,6 +47,11 @@ function Dashboard() {
             INFO
           </Link>
         </li>
+        <li className="nav-item" onClick={handleLogout}>
+          <Link to=".." className="nav-link">
+            LOGOUT
+          </Link>
+        </li>
       </nav>
       <div>
         <Routes>
@@ -40,6 +62,6 @@ function Dashboard() {
       </div>
     </div>
   );
-};
+}
 
 export default Dashboard;
