@@ -6,8 +6,10 @@ import CollectionsLibrary from "./collection/CollectionsLibrary.js";
 
 function Gallery() {
   return (
-    <div className="h100 w100">
-      <h3 className="px-4 pt-4 pb-2">GALLERY</h3>
+    <div className="h100">
+      <h3 className="px-4 pt-4 pb-2">
+        GALLERY
+      </h3>
       <nav className="navbar navbar-expand navbar-dark bg-secondary px-3">
         <div className="navbar-nav mr-auto">
           <li className="nav-item">

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from 'react-router-dom';
+// Services
 import ArtworkService from "../../../services/artwork-service.js";
 
 function Artwork() { //props

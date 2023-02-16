@@ -24,7 +24,7 @@ function Dashboard() {
 
   // Render
   return (
-    <div className="d-flex h100">
+    <div className="grid-dashboard h100">
       <nav className="navbar-nav navbar-dark bg-dark mr-auto p-4">
         <li className="nav-item">
           <p className="navbar-brand">

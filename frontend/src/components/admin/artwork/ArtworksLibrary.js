@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Popup from "reactjs-popup";
 // CSS
 import "reactjs-popup/dist/index.css";
@@ -9,24 +9,26 @@ import ArtworkService from "../../../services/artwork-service.js";
 import ArtworkAdd from "./ArtworkAdd.js";
 
 function ArtworksLibrary() {
+  const navigate = useNavigate();
+
   const [artworks, setArtworks] = useState([]);
   const [currentArtwork, setCurrentArtwork] = useState(null);
   const [currentIndex, setCurrentIndex] = useState(-1);
 
+  const retrieveArtworks = () => {
+    ArtworkService.getAll()
+      .then((res) => {
+        setArtworks(res.data);
+        console.log(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   useEffect(() => {
     retrieveArtworks();
   }, []);
-
-  const retrieveArtworks = () => {
-    ArtworkService.getAll()
-      .then((response) => {
-        setArtworks(response.data);
-        console.log(response.data);
-      })
-      .catch((e) => {
-        console.log(e);
-      });
-  };
 
   const refreshList = () => {
     retrieveArtworks();
@@ -41,55 +43,48 @@ function ArtworksLibrary() {
 
   const removeAllArtworks = () => {
     ArtworkService.removeAll()
-      .then((response) => {
-        console.log(response.data);
+      .then((res) => {
+        console.log(res.data);
         refreshList();
       })
-      .catch((e) => {
-        console.log(e);
+      .catch((err) => {
+        console.log(err);
       });
   };
 
+  // Render
   return (
-    <div className="list row">
-      <div className="col-md-6">
-        <h4>ARTWORKS LIBRARY</h4>
-
-        <ul className="list-group">
-          <Popup
-            trigger={<button className="btn bg-secondary">+</button>}
-            position="right center"
-          >
-            <div>
-              <ArtworkAdd />
-            </div>
-          </Popup>
-
-          {artworks &&
-            artworks.map((artwork, index) => (
-              <li
-                className={
-                  "list-group-item " + (index === currentIndex ? "active" : "")
-                }
-                onClick={() => setActiveArtwork(artwork, index)}
-                key={index}
-              >
-                {artwork.title}
-              </li>
-            ))}
-        </ul>
-
-        <button
-          className="m-3 btn btn-sm btn-danger"
-          onClick={removeAllArtworks}
+    <div className="b">
+      <h5>ARTWORKS LIBRARY</h5>
+      <div className="grid-artworks">
+      
+        <Popup
+          trigger={<button className="btn btn-secondary">+</button>}
+          position="bottom center"
         >
-          Remove All
-        </button>
+          <ArtworkAdd />
+        </Popup>
+
+        {artworks.map((artwork, index) => (
+          <div
+            className={index === currentIndex ? "active" : ""}
+            onMouseOver={() => setActiveArtwork(artwork, index)}
+            onMouseOut={() => setActiveArtwork(null, -1)}
+            onDoubleClick={() => navigate(artwork.id)}
+            key={index}
+          >
+            {artwork.title}
+          </div>
+        ))}
       </div>
-      <div className="col-md-6">
+
+      <button className="btn btn-danger" onClick={removeAllArtworks}>
+        Remove All
+      </button>
+
+      <div>
         {currentArtwork && (
           <div>
-            <h4>Artwork</h4>
             <div>
               <label>
                 <strong>Title:</strong>
@@ -102,18 +97,11 @@ function ArtworksLibrary() {
               </label>{" "}
               {currentArtwork.description}
             </div>
-
-            <Link
-              to={"/dashboard/gallery/artworks/" + currentArtwork.id}
-              className="badge badge-warning"
-            >
-              Edit
-            </Link>
           </div>
         )}
       </div>
     </div>
   );
-};
+}
 
 export default ArtworksLibrary;
