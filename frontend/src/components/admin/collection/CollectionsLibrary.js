@@ -1,8 +1,14 @@
 import React, { useState, useEffect } from "react";
-import ArtworkService from "../../../services/artwork-service.js";
 import { Link } from "react-router-dom";
+import Popup from "reactjs-popup";
+// CSS
+import "reactjs-popup/dist/index.css";
+// Services
+import ArtworkService from "../../../services/artwork-service.js";
+// Components
+import ArtworkAdd from "./CollectionAdd.js";
 
-const ArtworksLibrary = () => {
+function ArtworksLibrary() {
   const [artworks, setArtworks] = useState([]);
   const [currentArtwork, setCurrentArtwork] = useState(null);
   const [currentIndex, setCurrentIndex] = useState(-1);
@@ -13,11 +19,11 @@ const ArtworksLibrary = () => {
 
   const retrieveArtworks = () => {
     ArtworkService.getAll()
-      .then(response => {
+      .then((response) => {
         setArtworks(response.data);
         console.log(response.data);
       })
-      .catch(e => {
+      .catch((e) => {
         console.log(e);
       });
   };
@@ -35,11 +41,11 @@ const ArtworksLibrary = () => {
 
   const removeAllArtworks = () => {
     ArtworkService.removeAll()
-      .then(response => {
+      .then((response) => {
         console.log(response.data);
         refreshList();
       })
-      .catch(e => {
+      .catch((e) => {
         console.log(e);
       });
   };
@@ -50,6 +56,15 @@ const ArtworksLibrary = () => {
         <h4>COLLECTIONS LIBRARY</h4>
 
         <ul className="list-group">
+          <Popup
+            trigger={<button className="btn bg-secondary">+</button>}
+            position="right center"
+          >
+            <div>
+              <ArtworkAdd />
+            </div>
+          </Popup>
+
           {artworks &&
             artworks.map((artwork, index) => (
               <li

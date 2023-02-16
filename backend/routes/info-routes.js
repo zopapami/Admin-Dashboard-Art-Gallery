@@ -6,7 +6,7 @@ module.exports = app => {
   router.get("/", info.findAll);
 
   // update Info
-  router.put("/:id", info.update);
+  router.put("/", info.update);
 
-  app.use("/dashboard/info", router);
+  app.use("/admin/dashboard/info", router);
 };

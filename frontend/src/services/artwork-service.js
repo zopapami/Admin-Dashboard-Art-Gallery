@@ -2,32 +2,32 @@ import http from "./http-service.js";
 
 // create a new Artwork
 const create = (data) => {
-  return http.post("/gallery/artworks", data);
+  return http.admin.post("/gallery/artworks", data);
 };
 
 // retrieve all Artworks
 const getAll = () => {
-  return http.get("/gallery/artworks");
+  return http.admin.get("/gallery/artworks");
 };
 
 // retrieve a Artwork by id
 const get = (id) => {
-  return http.get(`/gallery/artworks/${id}`);
+  return http.admin.get(`/gallery/artworks/${id}`);
 };
 
 // update a Artwork by id
 const update = (id, data) => {
-  return http.put(`/gallery/artworks/${id}`, data);
+  return http.admin.put(`/gallery/artworks/${id}`, data);
 };
 
 // delete a Artwork by id
 const remove = (id) => {
-  return http.delete(`/gallery/artworks/${id}`);
+  return http.admin.delete(`/gallery/artworks/${id}`);
 };
 
 // delete all Artworks
 const removeAll = () => {
-  return http.delete("/gallery/artworks");
+  return http.admin.delete("/gallery/artworks");
 };
 
 const ArtworkService = {

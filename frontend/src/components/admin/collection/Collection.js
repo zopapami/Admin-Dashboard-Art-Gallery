@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from 'react-router-dom';
 import ArtworkService from "../../../services/artwork-service.js";
 
-const Artwork = props => {
+function Artwork() { //props
   const { id } = useParams();
   let navigate = useNavigate();
 
@@ -107,7 +107,7 @@ const Artwork = props => {
       ) : (
         <div>
           <br />
-          <p>Please click on a Collection...</p>
+          <p>Please click on a Artwork...</p>
         </div>
       )}
     </div>

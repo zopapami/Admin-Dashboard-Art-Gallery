@@ -27,11 +27,10 @@ function Dashboard() {
     <div className="d-flex h100">
       <nav className="navbar-nav navbar-dark bg-dark mr-auto p-4">
         <li className="nav-item">
-          <a href="dashboard" className="navbar-brand">
+          <p className="navbar-brand">
             DASHBOARD
-          </a>
+          </p>
         </li>
-        <br></br>
         <li className="nav-item">
           <Link to="home" className="nav-link">
             HOME

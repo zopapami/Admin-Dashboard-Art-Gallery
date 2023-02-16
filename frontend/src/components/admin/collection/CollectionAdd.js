@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import ArtworkService from "../../../services/artwork-service.js";
 
-const AddArtwork = () => {
+function ArtworkAdd() {
   const initialArtworkState = {
     id: null,
     artist: "",
@@ -99,4 +99,4 @@ const AddArtwork = () => {
   );
 };
 
-export default AddArtwork;
+export default ArtworkAdd;
