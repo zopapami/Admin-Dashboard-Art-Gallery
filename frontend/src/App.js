@@ -1,7 +1,9 @@
+// Bootstrap
+import "bootstrap";
+//
 import React from "react";
 import { Route, Routes } from "react-router-dom";
 // CSS
-import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 // Components
 import Main from "./components/main/Main.js";

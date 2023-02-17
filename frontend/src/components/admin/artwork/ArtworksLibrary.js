@@ -1,14 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import Popup from "reactjs-popup";
-// CSS
-import "reactjs-popup/dist/index.css";
+// Firebase
+import { deleteObject, getDownloadURL, ref, uploadBytes } from "firebase/storage";
 // Services
+import FirebaseService from "../../../services/firebase-service.js";
 import ArtworkService from "../../../services/artwork-service.js";
 
 function ArtworksLibrary() {
   const navigate = useNavigate();
-
   const initialArtworkState = {
     id: null,
     artist: "",
@@ -18,11 +17,12 @@ function ArtworksLibrary() {
     title: "",
     year: null,
   };
-
   const [artwork, setArtwork] = useState(initialArtworkState);
   const [artworks, setArtworks] = useState([]);
   const [currentArtwork, setCurrentArtwork] = useState(null);
   const [currentIndex, setCurrentIndex] = useState(-1);
+  const [image, setImage] = useState(null);
+  //const [picPreview, setPicPreview] = useState(null);
   //const [popupIsOpen, setPopupIsOpen] = useState(true);
 
   // retrieve all Artworks
@@ -72,6 +72,7 @@ function ArtworksLibrary() {
           year: res.data.year,
         });
         console.log("New Artwork:", res.data);
+        //uploadImage();
         refreshLibrary();
         setArtwork(initialArtworkState);
       })
@@ -104,6 +105,52 @@ function ArtworksLibrary() {
     setArtwork({ ...artwork, [name]: value });
   };
 
+  // Imaqe
+  const handleImage = (e) => {
+    const file = e.target.files[0];
+    //setPicPreview(URL.createObjectURL(file));
+    if (file) {
+      setImage(file);
+    }
+  };
+  // Upload
+  const uploadImage = () => {
+    const imageRef = ref(FirebaseService.storage, image.name);
+    uploadBytes(imageRef, image)
+      .then(() => {
+        console.log("Artwork file uploaded to storage!");
+        setImage(null);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  // Download
+  const downloadImage = () => {
+    const imageRef = ref(FirebaseService.storage, image.name);
+    getDownloadURL(imageRef)
+      .then((url) => {
+        artwork.imageURL = url;
+        console.log("Artwork file downloaded successfully!");
+      })
+      .catch((err) => {
+        console.log("Error:", err);
+      });
+  };
+  // Delete
+  const deleteImage = () => {
+    const imageRef = ref(FirebaseService.storage, image.name);
+    deleteObject(imageRef)
+      .then(() => {
+        console.log("Artwork file deleted successfully!");
+      })
+      .catch((err) => {
+        console.log("Error:", err);
+      });
+  };
+  // End Image
+  
   // Render
   return (
     <div className="b">
@@ -114,89 +161,121 @@ function ArtworksLibrary() {
       </button>
 
       <div className="grid-artworks">
-        <Popup
-          trigger={<button className="btn btn-secondary">+</button>}
-          position="right top"
+        <button
+          type="button"
+          class="btn btn-secondary"
+          data-bs-toggle="modal"
+          data-bs-target="#exampleModal"
         >
-          <div>
-            <div className="form-group">
-              <label htmlFor="title">Title</label>
-              <input
-                type="text"
-                className="form-control"
-                id="title"
-                required
-                value={artwork.title}
-                onChange={handleInputChange}
-                name="title"
-              />
+          +
+        </button>
+        <div
+          class="modal fade"
+          id="exampleModal"
+          tabindex="-1"
+          aria-labelledby="exampleModalLabel"
+          aria-hidden="true"
+        >
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">
+                  New Artwork
+                </h1>
+                <button
+                  type="button"
+                  class="btn-close"
+                  data-bs-dismiss="modal"
+                  aria-label="Close"
+                ></button>
+              </div>
+              <div class="modal-body">
+                <div className="form-group">
+                  <label htmlFor="title">Title</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="title"
+                    required
+                    value={artwork.title}
+                    onChange={handleInputChange}
+                    name="title"
+                  />
+                </div>
+                <div className="form-group">
+                  <label htmlFor="description">Description</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="description"
+                    required
+                    value={artwork.description}
+                    onChange={handleInputChange}
+                    name="description"
+                  />
+                </div>
+                <div className="form-group">
+                  <label htmlFor="artist">Artist</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="artist"
+                    required
+                    value={artwork.artist}
+                    onChange={handleInputChange}
+                    name="artist"
+                  />
+                </div>
+                <div className="form-group">
+                  <label htmlFor="year">Year</label>
+                  <input
+                    type="number"
+                    className="form-control"
+                    id="year"
+                    required
+                    value={artwork.year}
+                    onChange={handleInputChange}
+                    name="year"
+                  />
+                </div>
+                <div className="form-group">
+                  <label htmlFor="collection">Collection</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="collection"
+                    required
+                    value={artwork.category}
+                    onChange={handleInputChange}
+                    name="category"
+                  />
+                </div>
+                <div className="form-group">
+                  <label htmlFor="imageURL">Artwork</label>
+                  <input
+                    type="file"
+                    accept="images/*"
+                    multiple={false}
+                    className="form-control"
+                    id="imageURL"
+                    required
+                    onChange={handleImage}
+                    name="imageURL"
+                  />
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button
+                  type="button"
+                  class="btn btn-success"
+                  onClick={saveArtwork}
+                >
+                  Submit
+                </button>
+              </div>
             </div>
-            <div className="form-group">
-              <label htmlFor="description">Description</label>
-              <input
-                type="text"
-                className="form-control"
-                id="description"
-                required
-                value={artwork.description}
-                onChange={handleInputChange}
-                name="description"
-              />
-            </div>
-            <div className="form-group">
-              <label htmlFor="artist">Artist</label>
-              <input
-                type="text"
-                className="form-control"
-                id="artist"
-                required
-                value={artwork.artist}
-                onChange={handleInputChange}
-                name="artist"
-              />
-            </div>
-            <div className="form-group">
-              <label htmlFor="year">Year</label>
-              <input
-                type="number"
-                className="form-control"
-                id="year"
-                required
-                value={artwork.year}
-                onChange={handleInputChange}
-                name="year"
-              />
-            </div>
-            <div className="form-group">
-              <label htmlFor="collection">Collection</label>
-              <input
-                type="text"
-                className="form-control"
-                id="collection"
-                required
-                value={artwork.category}
-                onChange={handleInputChange}
-                name="category"
-              />
-            </div>
-            <div className="form-group">
-              <label htmlFor="imageURL">Artwork</label>
-              <input
-                type="text"
-                className="form-control"
-                id="imageURL"
-                required
-                value={artwork.imageURL}
-                onChange={handleInputChange}
-                name="imageURL"
-              />
-            </div>
-
-            <button onClick={saveArtwork} className="btn btn-success">
-              Submit
-            </button>
           </div>
-        </Popup>
+        </div>
 
         {artworks.map((artwork, index) => (
           <div
@@ -212,7 +291,7 @@ function ArtworksLibrary() {
       </div>
 
       {currentArtwork && (
-        <div className="stack-top b">
+        <div>
           <div>
             <label>
               <strong>Title:</strong>

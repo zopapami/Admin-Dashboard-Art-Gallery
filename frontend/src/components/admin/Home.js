@@ -1,4 +1,5 @@
 import React from "react";
+import "bootstrap/dist/css/bootstrap.min.css";
 
 function Home() {
   return (
@@ -6,6 +7,6 @@ function Home() {
       <h3>HOME</h3>
     </div>
   );
-};
+}
 
 export default Home;
