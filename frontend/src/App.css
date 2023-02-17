@@ -14,9 +14,15 @@
   grid-template-columns: 1fr 9fr;
 }
 
-
 .grid-artworks {
   display: grid;
-  grid-gap: 1em;
+  grid-gap: 2em;
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+  grid-template-rows: 1fr 1fr 1fr;
+}
+
+.stack-top{
+  padding: 10px;
+  width: 25%;
+  z-index: 10;
 }

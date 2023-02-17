@@ -39,6 +39,7 @@ exports.findAll = (req, res) => {
     });
 };
 
+
 // retrieve a Artwork by id
 exports.findOne = (req, res) => {
   // get id
