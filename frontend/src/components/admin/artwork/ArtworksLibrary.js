@@ -1,7 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 // Firebase
-import { deleteObject, getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import {
+  deleteObject,
+  getDownloadURL,
+  ref,
+  uploadBytes,
+} from "firebase/storage";
 // Services
 import FirebaseService from "../../../services/firebase-service.js";
 import ArtworkService from "../../../services/artwork-service.js";
@@ -121,25 +126,23 @@ function ArtworksLibrary() {
     uploadBytes(imageRef, image)
       .then(() => {
         console.log("Artwork file uploaded to storage!");
+        // Download
+        getDownloadURL(imageRef)
+          .then((data) => {
+            setArtwork({ imageURL: data });
+            console.log("Artwork file downloaded successfully!");
+          })
+          .catch((err) => {
+            console.log("Error while downloading:", err);
+          });
         setImage(null);
       })
       .catch((err) => {
-        console.log(err);
+        console.log("Error while uploading:", err);
       });
   };
+
   /*
-  // Download
-  const downloadImage = () => {
-    const imageRef = ref(FirebaseService.storage, image.name);
-    getDownloadURL(imageRef)
-      .then((url) => {
-        artwork.imageURL = url;
-        console.log("Artwork file downloaded successfully!");
-      })
-      .catch((err) => {
-        console.log("Error:", err);
-      });
-  };
   // Delete
   const deleteImage = () => {
     const imageRef = ref(FirebaseService.storage, image.name);
@@ -153,7 +156,7 @@ function ArtworksLibrary() {
   };
   */
   // End Image
-  
+
   // Render
   return (
     <div className="b">
