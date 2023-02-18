@@ -27,8 +27,6 @@ function ArtworksLibrary() {
   const [currentArtwork, setCurrentArtwork] = useState(null);
   const [currentIndex, setCurrentIndex] = useState(-1);
   const [image, setImage] = useState(null);
-  //const [picPreview, setPicPreview] = useState(null);
-  //const [popupIsOpen, setPopupIsOpen] = useState(true);
 
   // retrieve all Artworks
   const retrieveArtworks = () => {
@@ -38,7 +36,7 @@ function ArtworksLibrary() {
         console.log("All the artworks:", res.data);
       })
       .catch((err) => {
-        console.log("Error:", err);
+        console.log("Error while retrieving all the artworks:", err);
       });
   };
 
@@ -54,8 +52,48 @@ function ArtworksLibrary() {
     setCurrentIndex(-1);
   };
 
-  // create and save Artwork
+  // catch current Artwork
+  const setActiveArtwork = (artwork, index) => {
+    setCurrentArtwork(artwork);
+    setCurrentIndex(index);
+  };
+
+  // get Input Values
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setArtwork({ ...artwork, [name]: value });
+  };
+  const handleImageInput = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setImage(file);
+    }
+  };
+
+  // save Artwork File to storage
+  const handleImageSubmit = () => {
+    const imageRef = ref(FirebaseService.storage, `artworks/${image.name}`);
+    uploadBytes(imageRef, image)
+      .then(() => {
+        console.log("Artwork file uploaded to storage!");
+        getDownloadURL(imageRef)
+          .then((data) => {
+            setArtwork({ imageURL: data });
+            console.log("Artwork file downloaded from storage!");
+            setImage(null);
+          })
+          .catch((err) => {
+            console.log("Error while downloading:", err);
+          });
+      })
+      .catch((err) => {
+        console.log("Error while uploading:", err);
+      });
+  };
+
+  // create and save Artwork to database
   const saveArtwork = () => {
+    handleImageSubmit();
     let data = {
       artist: artwork.artist,
       category: artwork.category,
@@ -64,7 +102,6 @@ function ArtworksLibrary() {
       title: artwork.title,
       year: artwork.year,
     };
-
     ArtworkService.create(data)
       .then((res) => {
         setArtwork({
@@ -76,17 +113,29 @@ function ArtworksLibrary() {
           title: res.data.title,
           year: res.data.year,
         });
-        console.log("New Artwork:", res.data);
-        //uploadImage();
-        refreshLibrary();
+        console.log("The new Artwork:", res.data);
         setArtwork(initialArtworkState);
+      })
+      .catch((err) => {
+        console.log("Error while creating the new Artwork:", err);
+      });
+  };
+
+  /*
+  // delete Artwork File from storage
+  const deleteImage = () => {
+    const imageRef = ref(FirebaseService.storage, `artworks/${image.name}`);
+    deleteObject(imageRef)
+      .then(() => {
+        console.log("Artwork file deleted successfully!");
       })
       .catch((err) => {
         console.log("Error:", err);
       });
   };
+  */
 
-  // delete all Artworks
+  // delete all Artworks from database
   const removeAllArtworks = () => {
     ArtworkService.removeAll()
       .then((res) => {
@@ -97,65 +146,6 @@ function ArtworksLibrary() {
         console.log("Error:", err);
       });
   };
-
-  // catch current Artwork
-  const setActiveArtwork = (artwork, index) => {
-    setCurrentArtwork(artwork);
-    setCurrentIndex(index);
-  };
-
-  // get input values
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setArtwork({ ...artwork, [name]: value });
-  };
-
-  // Imaqe
-  const handleImage = (e) => {
-    const file = e.target.files[0];
-    console.log(file);
-    console.log(URL.createObjectURL(file));
-    //setPicPreview();
-    if (file) {
-      setImage(file);
-    }
-  };
-  // Upload
-  const uploadImage = () => {
-    const imageRef = ref(FirebaseService.storage, `artworks/${image.name}`);
-    uploadBytes(imageRef, image)
-      .then(() => {
-        console.log("Artwork file uploaded to storage!");
-        // Download
-        getDownloadURL(imageRef)
-          .then((data) => {
-            setArtwork({ imageURL: data });
-            console.log("Artwork file downloaded successfully!");
-          })
-          .catch((err) => {
-            console.log("Error while downloading:", err);
-          });
-        setImage(null);
-      })
-      .catch((err) => {
-        console.log("Error while uploading:", err);
-      });
-  };
-
-  /*
-  // Delete
-  const deleteImage = () => {
-    const imageRef = ref(FirebaseService.storage, image.name);
-    deleteObject(imageRef)
-      .then(() => {
-        console.log("Artwork file deleted successfully!");
-      })
-      .catch((err) => {
-        console.log("Error:", err);
-      });
-  };
-  */
-  // End Image
 
   // Render
   return (
@@ -265,7 +255,7 @@ function ArtworksLibrary() {
                     className="form-control"
                     id="imageURL"
                     required
-                    onChange={handleImage}
+                    onChange={handleImageInput}
                     name="imageURL"
                   />
                 </div>
@@ -274,7 +264,7 @@ function ArtworksLibrary() {
                 <button
                   type="button"
                   class="btn btn-success"
-                  onClick={uploadImage}
+                  onClick={saveArtwork}
                 >
                   Submit
                 </button>
@@ -291,7 +281,11 @@ function ArtworksLibrary() {
             onDoubleClick={() => navigate(artwork.id)}
             key={index}
           >
-            {artwork.title}
+            <img
+              src={artwork.imageURL}
+              alt={artwork.title}
+              width="200"
+            />
           </div>
         ))}
       </div>
