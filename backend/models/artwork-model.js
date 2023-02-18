@@ -7,7 +7,7 @@ module.exports = mongoose => {
       description: String,
       imageURL: String,
       title: String,
-      year: Number
+      year: String
     },
     { timestamps: true }
   );

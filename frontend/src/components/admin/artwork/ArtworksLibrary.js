@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 // Firebase
 import {
-  deleteObject,
+  //deleteObject,
   getDownloadURL,
   ref,
   uploadBytes,
@@ -20,7 +20,7 @@ function ArtworksLibrary() {
     description: "",
     imageURL: "",
     title: "",
-    year: null,
+    year: "",
   };
   const [artwork, setArtwork] = useState(initialArtworkState);
   const [artworks, setArtworks] = useState([]);
@@ -65,22 +65,48 @@ function ArtworksLibrary() {
   };
   const handleImageInput = (e) => {
     const file = e.target.files[0];
-    if (file) {
-      setImage(file);
-    }
+    setImage(file);
   };
 
-  // save Artwork File to storage
-  const handleImageSubmit = () => {
+  // save Artwork
+  const handleArtwork = () => {
     const imageRef = ref(FirebaseService.storage, `artworks/${image.name}`);
+    // save to storage
     uploadBytes(imageRef, image)
       .then(() => {
         console.log("Artwork file uploaded to storage!");
+        // retrieve from storage
         getDownloadURL(imageRef)
-          .then((data) => {
-            setArtwork({ imageURL: data });
+          .then((url) => {
+            artwork.imageURL = url;
             console.log("Artwork file downloaded from storage!");
             setImage(null);
+            let data = {
+              artist: artwork.artist,
+              category: artwork.category,
+              description: artwork.description,
+              imageURL: artwork.imageURL,
+              title: artwork.title,
+              year: artwork.year,
+            };
+            // save to database
+            ArtworkService.create(data)
+            .then((res) => {
+              setArtwork({
+                id: res.data.id,
+                artist: res.data.artist,
+                category: res.data.category,
+                description: res.data.description,
+                imageURL: res.data.imageURL,
+                title: res.data.title,
+                year: res.data.year,
+              });
+              console.log("The new Artwork:", res.data);
+              setArtwork(initialArtworkState);
+            })
+            .catch((err) => {
+              console.log("Error while creating the new Artwork:", err);
+            });
           })
           .catch((err) => {
             console.log("Error while downloading:", err);
@@ -88,36 +114,6 @@ function ArtworksLibrary() {
       })
       .catch((err) => {
         console.log("Error while uploading:", err);
-      });
-  };
-
-  // create and save Artwork to database
-  const saveArtwork = () => {
-    handleImageSubmit();
-    let data = {
-      artist: artwork.artist,
-      category: artwork.category,
-      description: artwork.description,
-      imageURL: artwork.imageURL,
-      title: artwork.title,
-      year: artwork.year,
-    };
-    ArtworkService.create(data)
-      .then((res) => {
-        setArtwork({
-          id: res.data.id,
-          artist: res.data.artist,
-          category: res.data.category,
-          description: res.data.description,
-          imageURL: res.data.imageURL,
-          title: res.data.title,
-          year: res.data.year,
-        });
-        console.log("The new Artwork:", res.data);
-        setArtwork(initialArtworkState);
-      })
-      .catch((err) => {
-        console.log("Error while creating the new Artwork:", err);
       });
   };
 
@@ -159,40 +155,39 @@ function ArtworksLibrary() {
       <div className="grid-artworks">
         <button
           type="button"
-          class="btn btn-secondary"
+          className="btn btn-secondary"
           data-bs-toggle="modal"
           data-bs-target="#exampleModal"
         >
           +
         </button>
         <div
-          class="modal fade"
+          className="modal fade"
           id="exampleModal"
-          tabindex="-1"
+          tabIndex="-1"
           aria-labelledby="exampleModalLabel"
           aria-hidden="true"
         >
-          <div class="modal-dialog">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h1 class="modal-title fs-5" id="exampleModalLabel">
+          <div className="modal-dialog modal-dialog-scrollable">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h1 className="modal-title fs-5" id="exampleModalLabel">
                   New Artwork
                 </h1>
                 <button
                   type="button"
-                  class="btn-close"
+                  className="btn-close"
                   data-bs-dismiss="modal"
                   aria-label="Close"
                 ></button>
               </div>
-              <div class="modal-body">
+              <div className="modal-body">
                 <div className="form-group">
                   <label htmlFor="title">Title</label>
                   <input
                     type="text"
                     className="form-control"
                     id="title"
-                    required
                     value={artwork.title}
                     onChange={handleInputChange}
                     name="title"
@@ -204,7 +199,6 @@ function ArtworksLibrary() {
                     type="text"
                     className="form-control"
                     id="description"
-                    required
                     value={artwork.description}
                     onChange={handleInputChange}
                     name="description"
@@ -216,7 +210,6 @@ function ArtworksLibrary() {
                     type="text"
                     className="form-control"
                     id="artist"
-                    required
                     value={artwork.artist}
                     onChange={handleInputChange}
                     name="artist"
@@ -225,10 +218,9 @@ function ArtworksLibrary() {
                 <div className="form-group">
                   <label htmlFor="year">Year</label>
                   <input
-                    type="number"
+                    type="text"
                     className="form-control"
                     id="year"
-                    required
                     value={artwork.year}
                     onChange={handleInputChange}
                     name="year"
@@ -240,7 +232,6 @@ function ArtworksLibrary() {
                     type="text"
                     className="form-control"
                     id="collection"
-                    required
                     value={artwork.category}
                     onChange={handleInputChange}
                     name="category"
@@ -260,11 +251,11 @@ function ArtworksLibrary() {
                   />
                 </div>
               </div>
-              <div class="modal-footer">
+              <div className="modal-footer">
                 <button
                   type="button"
-                  class="btn btn-success"
-                  onClick={saveArtwork}
+                  className="btn btn-success"
+                  onClick={handleArtwork}
                 >
                   Submit
                 </button>
@@ -281,11 +272,7 @@ function ArtworksLibrary() {
             onDoubleClick={() => navigate(artwork.id)}
             key={index}
           >
-            <img
-              src={artwork.imageURL}
-              alt={artwork.title}
-              width="200"
-            />
+            <img src={artwork.imageURL} alt={artwork.title} height="150" width="150" />
           </div>
         ))}
       </div>

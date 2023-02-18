@@ -14,7 +14,7 @@ function Artwork() { //props
     description: "",
     imageURL: "",
     title: "",
-    year: null
+    year: ""
   };
   const [currentArtwork, setCurrentArtwork] = useState(initialArtworkState);
   const [message, setMessage] = useState("");
