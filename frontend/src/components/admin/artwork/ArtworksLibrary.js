@@ -108,14 +108,16 @@ function ArtworksLibrary() {
   // Imaqe
   const handleImage = (e) => {
     const file = e.target.files[0];
-    //setPicPreview(URL.createObjectURL(file));
+    console.log(file);
+    console.log(URL.createObjectURL(file));
+    //setPicPreview();
     if (file) {
       setImage(file);
     }
   };
   // Upload
   const uploadImage = () => {
-    const imageRef = ref(FirebaseService.storage, image.name);
+    const imageRef = ref(FirebaseService.storage, `artworks/${image.name}`);
     uploadBytes(imageRef, image)
       .then(() => {
         console.log("Artwork file uploaded to storage!");
@@ -125,7 +127,7 @@ function ArtworksLibrary() {
         console.log(err);
       });
   };
-
+  /*
   // Download
   const downloadImage = () => {
     const imageRef = ref(FirebaseService.storage, image.name);
@@ -149,6 +151,7 @@ function ArtworksLibrary() {
         console.log("Error:", err);
       });
   };
+  */
   // End Image
   
   // Render
@@ -268,7 +271,7 @@ function ArtworksLibrary() {
                 <button
                   type="button"
                   class="btn btn-success"
-                  onClick={saveArtwork}
+                  onClick={uploadImage}
                 >
                   Submit
                 </button>
