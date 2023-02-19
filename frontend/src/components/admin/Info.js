@@ -50,7 +50,8 @@ function Info() {
   return (
     <div className="h100 p-4">
       <h4>WEBSITE DETAILS</h4>
-      <form>
+      <div className="scrollbar scrollbar-primary">
+      <form className="force-overflow">
         <div className="form-group">
           <label htmlFor="name">Display Name</label>
           <input
@@ -140,6 +141,8 @@ function Info() {
           />
         </div>
       </form>
+      </div>
+
       <button type="submit" className="btn btn-success" onClick={updateInfo}>
         Save Changes
       </button>

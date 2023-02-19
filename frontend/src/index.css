@@ -1,11 +1,6 @@
 /* ---------- Fonts -------------------------------------------------------- */
 @import url("https://fonts.googleapis.com/css2?family=GFS+Neohellenic&display=swap");
 
-/* ---------- Main Colors -------------------------------------------------- */
-:root {
-  --main-dark: #2a2a31;
-  --main-light: #ffffff;
-}
 /* ------------------------------------------------------------------------- */
 body,
 html {
@@ -14,7 +9,6 @@ html {
   -moz-osx-font-smoothing: grayscale;
   margin: 0 auto;
 }
-
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
