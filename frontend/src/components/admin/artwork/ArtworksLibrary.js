@@ -91,22 +91,22 @@ function ArtworksLibrary() {
             };
             // save to database
             ArtworkService.create(data)
-            .then((res) => {
-              setArtwork({
-                id: res.data.id,
-                artist: res.data.artist,
-                category: res.data.category,
-                description: res.data.description,
-                imageURL: res.data.imageURL,
-                title: res.data.title,
-                year: res.data.year,
+              .then((res) => {
+                setArtwork({
+                  id: res.data.id,
+                  artist: res.data.artist,
+                  category: res.data.category,
+                  description: res.data.description,
+                  imageURL: res.data.imageURL,
+                  title: res.data.title,
+                  year: res.data.year,
+                });
+                console.log("The new Artwork:", res.data);
+                setArtwork(initialArtworkState);
+              })
+              .catch((err) => {
+                console.log("Error while creating the new Artwork:", err);
               });
-              console.log("The new Artwork:", res.data);
-              setArtwork(initialArtworkState);
-            })
-            .catch((err) => {
-              console.log("Error while creating the new Artwork:", err);
-            });
           })
           .catch((err) => {
             console.log("Error while downloading:", err);
@@ -145,7 +145,7 @@ function ArtworksLibrary() {
 
   // Render
   return (
-    <div className="b">
+    <div>
       <h5>ARTWORKS LIBRARY</h5>
 
       <button className="btn btn-danger" onClick={removeAllArtworks}>
@@ -153,7 +153,6 @@ function ArtworksLibrary() {
       </button>
 
       <div className="grid-artworks">
-
         <button
           type="button"
           className="btn btn-secondary"
@@ -274,7 +273,11 @@ function ArtworksLibrary() {
             onDoubleClick={() => navigate("..")}
             key={index}
           >
-            <img src={artwork.imageURL} alt={artwork.title} className="maxh150" />
+            <img
+              src={artwork.imageURL}
+              alt={artwork.title}
+              className="maxh150"
+            />
           </div>
         ))}
       </div>
@@ -313,9 +316,6 @@ function ArtworksLibrary() {
           </div>
         </div>
       )}
-
-      
-
     </div>
   );
 }

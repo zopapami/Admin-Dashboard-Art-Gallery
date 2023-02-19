@@ -9,11 +9,11 @@ import {
 } from "firebase/storage";
 // Services
 import FirebaseService from "../../../services/firebase-service.js";
-import ArtworkService from "../../../services/artwork-service.js";
+import CollectionService from "../../../services/collection-service.js";
 
-function ArtworksLibrary() {
+function CollectionsLibrary() {
   const navigate = useNavigate();
-  const initialArtworkState = {
+  const initialCollectionState = {
     id: null,
     artist: "",
     category: "", //collection
@@ -22,91 +22,91 @@ function ArtworksLibrary() {
     title: "",
     year: "",
   };
-  const [artwork, setArtwork] = useState(initialArtworkState);
-  const [artworks, setArtworks] = useState([]);
-  const [currentArtwork, setCurrentArtwork] = useState(null);
+  const [collection, setCollection] = useState(initialCollectionState);
+  const [collections, setCollections] = useState([]);
+  const [currentCollection, setCurrentCollection] = useState(null);
   const [currentIndex, setCurrentIndex] = useState(-1);
   const [image, setImage] = useState(null);
 
-  // retrieve all Artworks
-  const retrieveArtworks = () => {
-    ArtworkService.getAll()
+  // retrieve all Collections
+  const retrieveCollections = () => {
+    CollectionService.getAll()
       .then((res) => {
-        setArtworks(res.data);
-        console.log("All the artworks:", res.data);
+        setCollections(res.data);
+        console.log("All the collections:", res.data);
       })
       .catch((err) => {
-        console.log("Error while retrieving all the artworks:", err);
+        console.log("Error while retrieving all the collections:", err);
       });
   };
 
-  // display all Artworks
+  // display all Collections
   useEffect(() => {
-    retrieveArtworks();
+    retrieveCollections();
   }, []);
 
-  // refresh Artworks Library
+  // refresh Collections Library
   const refreshLibrary = () => {
-    retrieveArtworks();
-    setCurrentArtwork(null);
+    retrieveCollections();
+    setCurrentCollection(null);
     setCurrentIndex(-1);
   };
 
-  // catch current Artwork
-  const setActiveArtwork = (artwork, index) => {
-    setCurrentArtwork(artwork);
+  // catch current Collection
+  const setActiveCollection = (collection, index) => {
+    setCurrentCollection(collection);
     setCurrentIndex(index);
   };
 
   // get Input Values
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setArtwork({ ...artwork, [name]: value });
+    setCollection({ ...collection, [name]: value });
   };
   const handleImageInput = (e) => {
     const file = e.target.files[0];
     setImage(file);
   };
 
-  // save Artwork
-  const handleArtwork = () => {
-    const imageRef = ref(FirebaseService.storage, `artworks/${image.name}`);
+  // save Collection
+  const handleCollection = () => {
+    const imageRef = ref(FirebaseService.storage, `collections/${image.name}`);
     // save to storage
     uploadBytes(imageRef, image)
       .then(() => {
-        console.log("Artwork file uploaded to storage!");
+        console.log("Collection file uploaded to storage!");
         // retrieve from storage
         getDownloadURL(imageRef)
           .then((url) => {
-            artwork.imageURL = url;
-            console.log("Artwork file downloaded from storage!");
+            collection.imageURL = url;
+            console.log("Collection file downloaded from storage!");
             setImage(null);
             let data = {
-              artist: artwork.artist,
-              category: artwork.category,
-              description: artwork.description,
-              imageURL: artwork.imageURL,
-              title: artwork.title,
-              year: artwork.year,
+              artist: collection.artist,
+              category: collection.category,
+              description: collection.description,
+              imageURL: collection.imageURL,
+              title: collection.title,
+              year: collection.year,
             };
             // save to database
-            ArtworkService.create(data)
-            .then((res) => {
-              setArtwork({
-                id: res.data.id,
-                artist: res.data.artist,
-                category: res.data.category,
-                description: res.data.description,
-                imageURL: res.data.imageURL,
-                title: res.data.title,
-                year: res.data.year,
+            CollectionService.create(data)
+              .then((res) => {
+                setCollection({
+                  id: res.data.id,
+                  artist: res.data.artist,
+                  category: res.data.category,
+                  description: res.data.description,
+                  imageURL: res.data.imageURL,
+                  title: res.data.title,
+                  year: res.data.year,
+                });
+                console.log("The new Collection:", res.data);
+                setCollection(initialCollectionState);
+              })
+              .catch((err) => {
+                console.log("Error while creating the new Collection:", err);
               });
-              console.log("The new Artwork:", res.data);
-              setArtwork(initialArtworkState);
-            })
-            .catch((err) => {
-              console.log("Error while creating the new Artwork:", err);
-            });
           })
           .catch((err) => {
             console.log("Error while downloading:", err);
@@ -118,12 +118,12 @@ function ArtworksLibrary() {
   };
 
   /*
-  // delete Artwork File from storage
+  // delete Collection File from storage
   const deleteImage = () => {
-    const imageRef = ref(FirebaseService.storage, `artworks/${image.name}`);
+    const imageRef = ref(FirebaseService.storage, `collections/${image.name}`);
     deleteObject(imageRef)
       .then(() => {
-        console.log("Artwork file deleted successfully!");
+        console.log("Collection file deleted successfully!");
       })
       .catch((err) => {
         console.log("Error:", err);
@@ -131,11 +131,11 @@ function ArtworksLibrary() {
   };
   */
 
-  // delete all Artworks from database
-  const removeAllArtworks = () => {
-    ArtworkService.removeAll()
+  // delete all Collections from database
+  const removeAllCollections = () => {
+    CollectionService.removeAll()
       .then((res) => {
-        console.log("All artworks have been removed:", res.data);
+        console.log("All collections have been removed:", res.data);
         refreshLibrary();
       })
       .catch((err) => {
@@ -145,15 +145,14 @@ function ArtworksLibrary() {
 
   // Render
   return (
-    <div className="b">
+    <div>
       <h5>COLLECTIONS LIBRARY</h5>
 
-      <button className="btn btn-danger" onClick={removeAllArtworks}>
+      <button className="btn btn-danger" onClick={removeAllCollections}>
         Remove All
       </button>
 
       <div className="grid-collections">
-
         <button
           type="button"
           className="btn btn-secondary maxh200"
@@ -191,7 +190,7 @@ function ArtworksLibrary() {
                     type="text"
                     className="form-control"
                     id="title"
-                    value={artwork.title}
+                    value={collection.title}
                     onChange={handleInputChange}
                     name="title"
                   />
@@ -202,7 +201,7 @@ function ArtworksLibrary() {
                     type="text"
                     className="form-control"
                     id="description"
-                    value={artwork.description}
+                    value={collection.description}
                     onChange={handleInputChange}
                     name="description"
                   />
@@ -213,7 +212,7 @@ function ArtworksLibrary() {
                     type="text"
                     className="form-control"
                     id="artist"
-                    value={artwork.artist}
+                    value={collection.artist}
                     onChange={handleInputChange}
                     name="artist"
                   />
@@ -224,7 +223,7 @@ function ArtworksLibrary() {
                     type="text"
                     className="form-control"
                     id="year"
-                    value={artwork.year}
+                    value={collection.year}
                     onChange={handleInputChange}
                     name="year"
                   />
@@ -235,7 +234,7 @@ function ArtworksLibrary() {
                     type="text"
                     className="form-control"
                     id="collection"
-                    value={artwork.category}
+                    value={collection.category}
                     onChange={handleInputChange}
                     name="category"
                   />
@@ -258,7 +257,7 @@ function ArtworksLibrary() {
                 <button
                   type="button"
                   className="btn btn-success"
-                  onClick={handleArtwork}
+                  onClick={handleCollection}
                 >
                   Submit
                 </button>
@@ -267,58 +266,59 @@ function ArtworksLibrary() {
           </div>
         </div>
 
-        {artworks.map((artwork, index) => (
+        {collections.map((collection, index) => (
           <div
             className={index === currentIndex ? "active" : ""}
-            onMouseOver={() => setActiveArtwork(artwork, index)}
-            onMouseOut={() => setActiveArtwork(null, -1)}
+            onMouseOver={() => setActiveCollection(collection, index)}
+            onMouseOut={() => setActiveCollection(null, -1)}
             onDoubleClick={() => navigate("..")}
             key={index}
           >
-            <img src={artwork.imageURL} alt={artwork.title} className="maxh200" />
+            <img
+              src={collection.imageURL}
+              alt={collection.title}
+              className="maxh200"
+            />
           </div>
         ))}
       </div>
 
-      {currentArtwork && (
+      {currentCollection && (
         <div>
           <div>
             <label>
               <strong>Title:</strong>
             </label>{" "}
-            {currentArtwork.title}
+            {currentCollection.title}
           </div>
           <div>
             <label>
               <strong>Description:</strong>
             </label>{" "}
-            {currentArtwork.description}
+            {currentCollection.description}
           </div>
           <div>
             <label>
               <strong>Artist:</strong>
             </label>{" "}
-            {currentArtwork.artist}
+            {currentCollection.artist}
           </div>
           <div>
             <label>
               <strong>Year:</strong>
             </label>{" "}
-            {currentArtwork.year}
+            {currentCollection.year}
           </div>
           <div>
             <label>
               <strong>Collection:</strong>
             </label>{" "}
-            {currentArtwork.category}
+            {currentCollection.category}
           </div>
         </div>
       )}
-
-      
-
     </div>
   );
 }
 
-export default ArtworksLibrary;
+export default CollectionsLibrary;
