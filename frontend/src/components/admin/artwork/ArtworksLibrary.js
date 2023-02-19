@@ -153,6 +153,7 @@ function ArtworksLibrary() {
       </button>
 
       <div className="grid-artworks">
+
         <button
           type="button"
           className="btn btn-secondary"
@@ -161,6 +162,7 @@ function ArtworksLibrary() {
         >
           +
         </button>
+
         <div
           className="modal fade"
           id="exampleModal"
@@ -269,10 +271,10 @@ function ArtworksLibrary() {
             className={index === currentIndex ? "active" : ""}
             onMouseOver={() => setActiveArtwork(artwork, index)}
             onMouseOut={() => setActiveArtwork(null, -1)}
-            onDoubleClick={() => navigate(artwork.id)}
+            onDoubleClick={() => navigate("..")}
             key={index}
           >
-            <img src={artwork.imageURL} alt={artwork.title} height="150" width="150" />
+            <img src={artwork.imageURL} alt={artwork.title} className="maxh150" />
           </div>
         ))}
       </div>
@@ -311,6 +313,9 @@ function ArtworksLibrary() {
           </div>
         </div>
       )}
+
+      
+
     </div>
   );
 }

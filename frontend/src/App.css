@@ -7,6 +7,12 @@
 .h100 {
   height: 100vh;
 }
+.maxh150 {
+  max-height: 150px;
+}
+.maxh200 {
+  max-height: 200px;
+}
 /*--------------------------------------------------*/
 
 .grid-dashboard {
@@ -16,6 +22,12 @@
 
 .grid-artworks {
   display: grid;
-  grid-gap: 2em;
+  grid-gap: 10px;
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+}
+
+.grid-collections {
+  display: grid;
+  grid-gap: 20px;
+  grid-template-columns: 1fr 1fr 1fr;
 }
