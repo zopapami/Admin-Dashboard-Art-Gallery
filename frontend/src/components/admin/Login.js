@@ -13,9 +13,11 @@ function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [loader, setLoader] = useState(true);
 
   useEffect(() => {
     onAuthStateChanged(FirebaseService.auth, (user) => {
+      setLoader(false);
       if (user) {
         const uid = user.uid;
         setIsLoggedIn(true);
@@ -23,8 +25,8 @@ function Login() {
       } else {
         setIsLoggedIn(false);
         console.log("Admin is logged out!");
-      };
-    }); 
+      }
+    });
   }, []);
 
   // Login
@@ -40,54 +42,71 @@ function Login() {
         const errCode = err.code;
         const errMessage = err.message;
         console.log(errCode, errMessage);
-      }); 
+      });
   };
 
   // Render
   return (
     <div>
-      {isLoggedIn ? (
-        <div>
-          <Routes>
-            <Route path="dashboard/*" element={<Dashboard />} />
-          </Routes>
+      {loader ? (
+        <div className="position-absolute top-50 start-50 translate-middle">
+          <div class="spinner-border" role="status">
+            <span class="visually-hidden">Loading...</span>
+          </div>
         </div>
       ) : (
         <div>
-          <form>
-            <div className="mb-3 d-flex flex-column">
-              <label className="mb-1" htmlFor="email">
-                Email Address
-              </label>
-              <input
-                type="email"
-                id="email-address"
-                name="email"
-                onChange={(e) => setEmail(e.target.value)}
-                required
-                placeholder="Email address"
-              />
+          {isLoggedIn ? (
+            <div>
+              <Routes>
+                <Route path="dashboard/*" element={<Dashboard />} />
+              </Routes>
             </div>
-            <div className="mb-3 d-flex flex-column">
-              <label className="mb-1" htmlFor="password">
-                Password
-              </label>
-              <input
-                type="password"
-                id="password"
-                name="password"
-                onChange={(e) => setPassword(e.target.value)}
-                required
-                placeholder="Password"
-              />
+          ) : (
+            <div className="bg-gallery h100">
+            <div className="card position-absolute margin-relative">
+              <form className="m-4">
+                <div className="m-3 form-group">
+                  <label className="mb-1" htmlFor="email">
+                    Email Address
+                  </label>
+                  <input
+                    type="email"
+                    className="form-control"
+                    id="email-address"
+                    name="email"
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                    placeholder="Email address"
+                  />
+                </div>
+                <div className="m-3 form-group">
+                  <label className="mb-1" htmlFor="password">
+                    Password
+                  </label>
+                  <input
+                    type="password"
+                    className="form-control"
+                    id="password"
+                    name="password"
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                    placeholder="Password"
+                  />
+                </div>
+                <div className="m-3 form-group">
+                  <button
+                    type="submit"
+                    className="mt-2 btn btn-primary"
+                    onClick={onLogin}
+                  >
+                    LOGIN
+                  </button>
+                </div>
+              </form>
             </div>
-            <button
-              type="submit"
-              onClick={onLogin}
-            >
-              LOGIN
-            </button>
-          </form>
+            </div>
+          )}
         </div>
       )}
     </div>
