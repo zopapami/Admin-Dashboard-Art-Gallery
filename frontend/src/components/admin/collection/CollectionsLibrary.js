@@ -15,12 +15,9 @@ function CollectionsLibrary() {
   const navigate = useNavigate();
   const initialCollectionState = {
     id: null,
-    artist: "",
-    category: "", //collection
     description: "",
     imageURL: "",
-    title: "",
-    year: "",
+    title: ""
   };
   const [collection, setCollection] = useState(initialCollectionState);
   const [collections, setCollections] = useState([]);
@@ -82,24 +79,18 @@ function CollectionsLibrary() {
             console.log("Collection file downloaded from storage!");
             setImage(null);
             let data = {
-              artist: collection.artist,
-              category: collection.category,
               description: collection.description,
               imageURL: collection.imageURL,
-              title: collection.title,
-              year: collection.year,
+              title: collection.title
             };
             // save to database
             CollectionService.create(data)
               .then((res) => {
                 setCollection({
                   id: res.data.id,
-                  artist: res.data.artist,
-                  category: res.data.category,
                   description: res.data.description,
                   imageURL: res.data.imageURL,
-                  title: res.data.title,
-                  year: res.data.year,
+                  title: res.data.title
                 });
                 console.log("The new Collection:", res.data);
                 setCollection(initialCollectionState);
@@ -174,7 +165,7 @@ function CollectionsLibrary() {
             <div className="modal-content">
               <div className="modal-header">
                 <h1 className="modal-title fs-5" id="exampleModalLabel">
-                  New Artwork
+                  New Collection
                 </h1>
                 <button
                   type="button"
@@ -207,40 +198,7 @@ function CollectionsLibrary() {
                   />
                 </div>
                 <div className="form-group">
-                  <label htmlFor="artist">Artist</label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    id="artist"
-                    value={collection.artist}
-                    onChange={handleInputChange}
-                    name="artist"
-                  />
-                </div>
-                <div className="form-group">
-                  <label htmlFor="year">Year</label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    id="year"
-                    value={collection.year}
-                    onChange={handleInputChange}
-                    name="year"
-                  />
-                </div>
-                <div className="form-group">
-                  <label htmlFor="collection">Collection</label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    id="collection"
-                    value={collection.category}
-                    onChange={handleInputChange}
-                    name="category"
-                  />
-                </div>
-                <div className="form-group">
-                  <label htmlFor="imageURL">Artwork</label>
+                  <label htmlFor="imageURL">Collection</label>
                   <input
                     type="file"
                     accept="images/*"
@@ -296,24 +254,6 @@ function CollectionsLibrary() {
               <strong>Description:</strong>
             </label>{" "}
             {currentCollection.description}
-          </div>
-          <div>
-            <label>
-              <strong>Artist:</strong>
-            </label>{" "}
-            {currentCollection.artist}
-          </div>
-          <div>
-            <label>
-              <strong>Year:</strong>
-            </label>{" "}
-            {currentCollection.year}
-          </div>
-          <div>
-            <label>
-              <strong>Collection:</strong>
-            </label>{" "}
-            {currentCollection.category}
           </div>
         </div>
       )}
