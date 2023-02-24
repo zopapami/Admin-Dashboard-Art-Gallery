@@ -1,4 +1,6 @@
 import React from "react";
+// CSS
+import "../../assets/css/Main.scss";
 
 function Main() {
   return (

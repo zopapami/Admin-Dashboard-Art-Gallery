@@ -1,0 +1,29 @@
+/* ---------------------------------------------------------------------- */
+.button {
+  background-color: #ffffff;
+  box-shadow: 0 0 3px #2A2A31;
+  border-radius: 5px;
+  color: #2A2A31;
+  font-weight: 500;
+
+  &:hover{
+    background-color: #ff6712;
+    color: #ffffff;
+
+    &:active {
+      background-color: #ed5500;
+      border: solid 2px #ed5500;
+      color: #ffffff;
+    }
+  }
+}
+
+.size-button-130 {
+  height: 130px;
+  width: 130px;
+}
+
+.size-button-180 {
+  height: 180px;
+  width: 180px;
+}

@@ -2,10 +2,12 @@ import React, { useEffect, useState } from "react";
 import { Route, Routes, useNavigate } from "react-router-dom";
 // Firebase
 import { onAuthStateChanged, signInWithEmailAndPassword } from "firebase/auth";
+// CSS
+import "../../assets/css/Login.scss";
 // Services
 import FirebaseService from "../../services/firebase-service.js";
 // Components
-import Dashboard from "./Dashboard.js";
+import Dashboard from "./dashboard/Dashboard.js";
 
 function Login() {
   const navigate = useNavigate();
@@ -50,8 +52,8 @@ function Login() {
     <div>
       {loader ? (
         <div className="position-absolute top-50 start-50 translate-middle">
-          <div class="spinner-border" role="status">
-            <span class="visually-hidden">Loading...</span>
+          <div className="spinner-border" role="status">
+            <span className="visually-hidden">Loading...</span>
           </div>
         </div>
       ) : (
@@ -63,48 +65,48 @@ function Login() {
               </Routes>
             </div>
           ) : (
-            <div className="bg-gallery h100">
-            <div className="card position-absolute margin-relative">
-              <form className="m-4">
-                <div className="m-3 form-group">
-                  <label className="mb-1" htmlFor="email">
-                    Email Address
-                  </label>
-                  <input
-                    type="email"
-                    className="form-control"
-                    id="email-address"
-                    name="email"
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
-                    placeholder="Email address"
-                  />
-                </div>
-                <div className="m-3 form-group">
-                  <label className="mb-1" htmlFor="password">
-                    Password
-                  </label>
-                  <input
-                    type="password"
-                    className="form-control"
-                    id="password"
-                    name="password"
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                    placeholder="Password"
-                  />
-                </div>
-                <div className="m-3 form-group">
-                  <button
-                    type="submit"
-                    className="mt-2 btn btn-primary"
-                    onClick={onLogin}
-                  >
-                    LOGIN
-                  </button>
-                </div>
-              </form>
-            </div>
+            <div className="bg-login h100">
+              <div className="card position-absolute margin-relative">
+                <form className="m-4">
+                  <div className="m-3 form-group">
+                    <label className="mb-1" htmlFor="email">
+                      Email Address
+                    </label>
+                    <input
+                      type="email"
+                      className="form-control"
+                      id="email-address"
+                      name="email"
+                      onChange={(e) => setEmail(e.target.value)}
+                      required
+                      placeholder="Email address"
+                    />
+                  </div>
+                  <div className="m-3 form-group">
+                    <label className="mb-1" htmlFor="password">
+                      Password
+                    </label>
+                    <input
+                      type="password"
+                      className="form-control"
+                      id="password"
+                      name="password"
+                      onChange={(e) => setPassword(e.target.value)}
+                      required
+                      placeholder="Password"
+                    />
+                  </div>
+                  <div className="m-3 form-group">
+                    <button
+                      type="submit"
+                      className="mt-2 btn button"
+                      onClick={onLogin}
+                    >
+                      LOGIN
+                    </button>
+                  </div>
+                </form>
+              </div>
             </div>
           )}
         </div>

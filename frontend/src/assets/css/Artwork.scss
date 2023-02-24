@@ -1,0 +1,17 @@
+@use "./Buttons.scss";
+
+/* ---------------------------------------------------------------------- */
+.bg-button {
+  background-color: #C4C4CB;
+}
+
+.grid-artworks {
+  display: grid;
+  grid-gap: 30px;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  justify-items: center;
+}
+
+.h-artwork {
+  height: 130px;
+}

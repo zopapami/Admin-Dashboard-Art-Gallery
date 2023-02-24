@@ -1,0 +1,13 @@
+/* ---------------------------------------------------------------------- */
+.grid-dashboard {
+  display: grid;
+  grid-template-columns: 1fr 9fr;
+}
+
+.navbar-text {
+  font-weight: 400;
+
+  &:focus {
+    color: #ED5500;
+  }
+}

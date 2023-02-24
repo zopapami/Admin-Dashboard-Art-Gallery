@@ -1,0 +1,13 @@
+/* ---------------------------------------------------------------------- */
+.bg-navbar {
+  background-color: #C4C4CB;
+}
+
+.nav-text {
+  color: #2A2A31;
+  font-weight: 500;
+
+  &:focus {
+    color: #ED5500;
+  }
+}
