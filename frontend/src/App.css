@@ -1,11 +1,16 @@
 /* ---------- Color Palette -------------------------------------------------- */
 :root {
   --grey-dark: #2a2a31;
-  --grey: #808080;
-  --grey-light: #c5c5c5;
+  --grey: #c4c4cb;
+  --grey-light: #e6e6ea;
   --white: #ffffff;
   --color: #ed5500;
 }
+
+.bg-color {
+  background-color: var(--color);
+}
+
 /* ---------- Assistants -------------------------------------------------- */
 .b {
   border: 1px solid #ff0000; 
@@ -14,8 +19,8 @@
 .h100 {
   height: 100vh;
 }
-.maxh150 {
-  max-height: 150px;
+.maxh130 {
+  max-height: 130px;
 }
 .maxh200 {
   max-height: 200px;
@@ -27,7 +32,8 @@
 .grid-artworks {
   display: grid;
   grid-gap: 10px;
-  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+  grid-template-columns: 130px 130px 130px 130px 130px;
+  grid-template-rows: 1fr 1fr 1fr;
 }
 .grid-collections {
   display: grid;

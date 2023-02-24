@@ -33,6 +33,7 @@ function Info() {
   const updateInfo = () => {
     InfoService.update(info)
       .then((res) => {
+        setInfo(res.data);
         console.log(res.data);
         setMessage("Info was updated successfully!");
       })
@@ -141,8 +142,8 @@ function Info() {
           />
         </div>
       </form>
-      </div>
 
+      </div>
       <button type="submit" className="btn btn-success" onClick={updateInfo}>
         Save Changes
       </button>

@@ -10,7 +10,7 @@ function Gallery() {
       <h3 className="px-4 pt-4 pb-2">
         GALLERY
       </h3>
-      <nav className="navbar navbar-expand navbar-dark bg-secondary px-3">
+      <nav className="navbar navbar-expand navbar-dark bg-color px-3">
         <div className="navbar-nav mr-auto">
           <li className="nav-item">
             <Link to="artworks" className="nav-link">

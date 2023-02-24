@@ -10,6 +10,8 @@ import {
 // Services
 import FirebaseService from "../../../services/firebase-service.js";
 import ArtworkService from "../../../services/artwork-service.js";
+// Images
+import Plus from "./plus-icon.png";
 
 function ArtworksLibrary() {
   const navigate = useNavigate();
@@ -146,20 +148,18 @@ function ArtworksLibrary() {
   // Render
   return (
     <div>
-      <h5>ARTWORKS LIBRARY</h5>
-
-      <button className="btn btn-danger" onClick={removeAllArtworks}>
+      <button className="btn btn-danger my-3" onClick={removeAllArtworks}>
         Remove All
       </button>
 
       <div className="grid-artworks">
         <button
           type="button"
-          className="btn btn-secondary"
+          className="btn btn-secondary maxh130"
           data-bs-toggle="modal"
           data-bs-target="#exampleModal"
         >
-          +
+          <img src={Plus} alt="plus-icon" width="50" />
         </button>
 
         <div
@@ -276,7 +276,7 @@ function ArtworksLibrary() {
             <img
               src={artwork.imageURL}
               alt={artwork.title}
-              className="maxh150"
+              className="maxh130"
             />
           </div>
         ))}
