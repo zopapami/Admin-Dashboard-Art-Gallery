@@ -10,6 +10,8 @@ import {
 // Services
 import FirebaseService from "../../../services/firebase-service.js";
 import CollectionService from "../../../services/collection-service.js";
+// Images
+import Plus from "../artwork/plus-icon.png";
 
 function CollectionsLibrary() {
   const navigate = useNavigate();
@@ -137,21 +139,18 @@ function CollectionsLibrary() {
   // Render
   return (
     <div>
-      <h5>COLLECTIONS LIBRARY</h5>
-
-      <button className="btn btn-danger" onClick={removeAllCollections}>
+      <button className="btn btn-danger my-3" onClick={removeAllCollections}>
         Remove All
       </button>
 
       <div className="grid-collections">
         <button
           type="button"
-          className="btn btn-secondary maxh200"
+          className="btn bg-color maxh180"
           data-bs-toggle="modal"
           data-bs-target="#exampleModal"
-          width="200"
         >
-          +
+          <img src={Plus} alt="plus-icon" width="70" />
         </button>
 
         <div
@@ -235,7 +234,7 @@ function CollectionsLibrary() {
             <img
               src={collection.imageURL}
               alt={collection.title}
-              className="maxh200"
+              className="maxh180"
             />
           </div>
         ))}

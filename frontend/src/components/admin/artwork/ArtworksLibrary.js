@@ -155,7 +155,7 @@ function ArtworksLibrary() {
       <div className="grid-artworks">
         <button
           type="button"
-          className="btn btn-secondary maxh130"
+          className="btn bg-color maxh130"
           data-bs-toggle="modal"
           data-bs-target="#exampleModal"
         >

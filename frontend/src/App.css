@@ -22,8 +22,8 @@
 .maxh130 {
   max-height: 130px;
 }
-.maxh200 {
-  max-height: 200px;
+.maxh180 {
+  max-height: 180px;
 }
 .margin-relative {
   margin: 10% 0% 0% 10%;
@@ -38,7 +38,8 @@
 .grid-collections {
   display: grid;
   grid-gap: 20px;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: 180px 180px 180px 180px 180px;
+  grid-template-rows: 1fr 1fr;
 }
 .grid-dashboard {
   display: grid;
