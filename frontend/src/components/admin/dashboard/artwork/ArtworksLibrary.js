@@ -150,9 +150,52 @@ function ArtworksLibrary() {
   // Render
   return (
     <div>
-      <button className="btn button float-end" onClick={removeAllArtworks}>
-        Empty Library
+      <button
+        type="button"
+        class="btn button float-end"
+        data-bs-toggle="modal"
+        data-bs-target="#removeModal"
+      >
+        Clear Library
       </button>
+      <div
+        class="modal fade"
+        id="removeModal"
+        tabindex="-1"
+        aria-labelledby="removeModalLabel"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="removeModalLabel">
+                Delete Artworks
+              </h5>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div class="modal-body">
+              Are you sure you want to delete all artworks?
+            </div>
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn button"
+                onClick={removeAllArtworks}
+              >
+                Delete
+              </button>
+              <button type="button" class="btn button" data-bs-dismiss="modal">
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
 
       <div className="grid-artworks p-5">
         <button
