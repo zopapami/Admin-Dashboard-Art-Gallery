@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate } from "react-router-dom";
 // Services
 import ArtworkService from "../../../services/artwork-service.js";
 
-function Artwork() { //props
+function Artwork() {
+  //props
   const { id } = useParams();
   let navigate = useNavigate();
 
@@ -14,50 +15,49 @@ function Artwork() { //props
     description: "",
     imageURL: "",
     title: "",
-    year: ""
+    year: "",
   };
   const [currentArtwork, setCurrentArtwork] = useState(initialArtworkState);
   const [message, setMessage] = useState("");
 
-  const getArtwork = id => {
+  const getArtwork = (id) => {
     ArtworkService.get(id)
-      .then(response => {
+      .then((response) => {
         setCurrentArtwork(response.data);
         console.log(response.data);
       })
-      .catch(e => {
+      .catch((e) => {
         console.log(e);
       });
   };
 
   useEffect(() => {
-    if (id)
-      getArtwork(id);
+    if (id) getArtwork(id);
   }, [id]);
 
-  const handleInputChange = event => {
+  const handleInputChange = (event) => {
     const { name, value } = event.target;
     setCurrentArtwork({ ...currentArtwork, [name]: value });
   };
 
   const updateArtwork = () => {
     ArtworkService.update(currentArtwork.id, currentArtwork)
-      .then(response => {
+      .then((response) => {
         console.log(response.data);
         setMessage("The Artwork was updated successfully!");
       })
-      .catch(e => {
+      .catch((e) => {
         console.log(e);
       });
   };
 
   const deleteArtwork = () => {
     ArtworkService.remove(currentArtwork.id)
-      .then(response => {
+      .then((response) => {
         console.log(response.data);
         navigate("/artworks");
       })
-      .catch(e => {
+      .catch((e) => {
         console.log(e);
       });
   };
@@ -113,6 +113,6 @@ function Artwork() { //props
       )}
     </div>
   );
-};
+}
 
 export default Artwork;

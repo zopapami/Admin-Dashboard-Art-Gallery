@@ -150,14 +150,14 @@ function ArtworksLibrary() {
   // Render
   return (
     <div>
-      <button className="btn button my-3" onClick={removeAllArtworks}>
-        Remove All
+      <button className="btn button float-end" onClick={removeAllArtworks}>
+        Empty Library
       </button>
 
-      <div className="grid-artworks">
+      <div className="grid-artworks p-5">
         <button
           type="button"
-          className="btn bg-button size-button-130"
+          className="btn button size-button-130"
           data-bs-toggle="modal"
           data-bs-target="#exampleModal"
         >
@@ -165,14 +165,14 @@ function ArtworksLibrary() {
         </button>
 
         <div
-          className="modal fade"
+          className="modal fade bg-modal"
           id="exampleModal"
           tabIndex="-1"
           aria-labelledby="exampleModalLabel"
           aria-hidden="true"
         >
           <div className="modal-dialog modal-dialog-scrollable">
-            <div className="modal-content">
+            <div className="modal-content bg-modal-content">
               <div className="modal-header">
                 <h1 className="modal-title fs-5" id="exampleModalLabel">
                   New Artwork
@@ -269,6 +269,7 @@ function ArtworksLibrary() {
 
         {artworks.map((artwork, index) => (
           <div
+            id="artworks"
             className={index === currentIndex ? "active" : ""}
             onMouseOver={() => setActiveArtwork(artwork, index)}
             onMouseOut={() => setActiveArtwork(null, -1)}
@@ -280,44 +281,27 @@ function ArtworksLibrary() {
               alt={artwork.title}
               className="h-artwork"
             />
+            <p></p>
+            <span>
+              <div>
+                <label>Title:</label> {artwork.title}
+              </div>
+              <div>
+                <label>Description:</label> {artwork.description}
+              </div>
+              <div>
+                <label>Artist:</label> {artwork.artist}
+              </div>
+              <div>
+                <label>Year:</label> {artwork.year}
+              </div>
+              <div>
+                <label>Collection:</label> {artwork.category}
+              </div>
+            </span>
           </div>
         ))}
       </div>
-
-      {currentArtwork && (
-        <div className="bg-warning">
-          <div>
-            <label>
-              <strong>Title:</strong>
-            </label>{" "}
-            {currentArtwork.title}
-          </div>
-          <div>
-            <label>
-              <strong>Description:</strong>
-            </label>{" "}
-            {currentArtwork.description}
-          </div>
-          <div>
-            <label>
-              <strong>Artist:</strong>
-            </label>{" "}
-            {currentArtwork.artist}
-          </div>
-          <div>
-            <label>
-              <strong>Year:</strong>
-            </label>{" "}
-            {currentArtwork.year}
-          </div>
-          <div>
-            <label>
-              <strong>Collection:</strong>
-            </label>{" "}
-            {currentArtwork.category}
-          </div>
-        </div>
-      )}
     </div>
   );
 }

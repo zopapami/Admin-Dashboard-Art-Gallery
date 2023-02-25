@@ -13,17 +13,17 @@
   }
   &::-webkit-scrollbar-track {
     border-radius: 10px;
-    box-shadow: inset 0 0 3px #f1f1f4;
+    box-shadow: inset 0 0 3px #F1F1F4;
   }
   &::-webkit-scrollbar-thumb {
-    background-color: #e6e6ea;
+    background-color: #E6E6EA;
     border-radius: 10px;
 
     &:hover {
-      background-color: #FF6712;
+      background-color: #AEAEB7;
     }
     &:active {
-      background-color: #ED5500;
+      background-color: #797983;
     }
   }
 }

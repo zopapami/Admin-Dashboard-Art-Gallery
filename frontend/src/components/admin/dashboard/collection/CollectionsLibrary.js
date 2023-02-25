@@ -141,14 +141,13 @@ function CollectionsLibrary() {
   // Render
   return (
     <div>
-      <button className="btn button my-3" onClick={removeAllCollections}>
-        Remove All
+      <button className="btn button float-end" onClick={removeAllCollections}>
+        Empty Library
       </button>
-
-      <div className="grid-collections">
+      <div className="grid-collections p-5">
         <button
           type="button"
-          className="btn bg-button size-button-180"
+          className="btn button size-button-180"
           data-bs-toggle="modal"
           data-bs-target="#exampleModal"
         >
@@ -156,14 +155,14 @@ function CollectionsLibrary() {
         </button>
 
         <div
-          className="modal fade"
+          className="modal fade bg-modal"
           id="exampleModal"
           tabIndex="-1"
           aria-labelledby="exampleModalLabel"
           aria-hidden="true"
         >
           <div className="modal-dialog modal-dialog-scrollable">
-            <div className="modal-content">
+            <div className="modal-content bg-modal-content">
               <div className="modal-header">
                 <h1 className="modal-title fs-5" id="exampleModalLabel">
                   New Collection
@@ -227,6 +226,7 @@ function CollectionsLibrary() {
 
         {collections.map((collection, index) => (
           <div
+            id="collections"
             className={index === currentIndex ? "active" : ""}
             onMouseOver={() => setActiveCollection(collection, index)}
             onMouseOut={() => setActiveCollection(null, -1)}
@@ -238,26 +238,18 @@ function CollectionsLibrary() {
               alt={collection.title}
               className="h-collection"
             />
+            <p></p>
+            <span>
+              <div>
+                <label>Title:</label> {collection.title}
+              </div>
+              <div>
+                <label>Description:</label> {collection.description}
+              </div>
+            </span>
           </div>
         ))}
       </div>
-
-      {currentCollection && (
-        <div className="bg-warning">
-          <div>
-            <label>
-              <strong>Title:</strong>
-            </label>{" "}
-            {currentCollection.title}
-          </div>
-          <div>
-            <label>
-              <strong>Description:</strong>
-            </label>{" "}
-            {currentCollection.description}
-          </div>
-        </div>
-      )}
     </div>
   );
 }

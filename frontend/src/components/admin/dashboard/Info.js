@@ -146,7 +146,7 @@ function Info() {
           </div>
         </form>
       </div>
-      <button type="submit" className="btn button my-3" onClick={updateInfo}>
+      <button type="submit" className="btn button mx-2" onClick={updateInfo}>
         Save Changes
       </button>
       <p>{message}</p>

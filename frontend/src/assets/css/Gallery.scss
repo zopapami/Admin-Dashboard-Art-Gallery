@@ -1,12 +1,16 @@
 /* ---------------------------------------------------------------------- */
-.bg-navbar {
-  background-color: #C4C4CB;
+.bg-modal {
+  background-color: rgb(237, 85, 0, 0.2);
 }
-
+.bg-modal-content {
+  background: linear-gradient(#F1F1F4, #FFFFFF);
+}
+.bg-navbar {
+  background: linear-gradient(#D5D5DB, #C4C4CB);
+}
 .nav-text {
   color: #2A2A31;
   font-weight: 500;
-
   &:focus {
     color: #ED5500;
   }

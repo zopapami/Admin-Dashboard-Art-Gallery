@@ -1,12 +1,13 @@
 /* ---------------------------------------------------------------------- */
+.bg-dashboard {
+  background: linear-gradient(#2A2A31, #373741);
+}
 .grid-dashboard {
   display: grid;
   grid-template-columns: 1fr 9fr;
 }
-
 .navbar-text {
   font-weight: 400;
-
   &:focus {
     color: #ED5500;
   }

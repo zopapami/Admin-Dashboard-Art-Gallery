@@ -1,28 +1,23 @@
 /* ---------------------------------------------------------------------- */
 .button {
-  background-color: #ffffff;
-  box-shadow: 0 0 3px #2A2A31;
+  background: linear-gradient(#D5D5DB, #C4C4CB);
+  box-shadow: 0px 4px 10px #D5D5DB;
+  border: none;
   border-radius: 5px;
   color: #2A2A31;
   font-weight: 500;
-
   &:hover{
-    background-color: #ff6712;
-    color: #ffffff;
-
+    background: linear-gradient(#FF6712, #ED5500);
+    color: #FFFFFF;
     &:active {
-      background-color: #ed5500;
-      border: solid 2px #ed5500;
-      color: #ffffff;
+      transform: translateY(1px);
     }
   }
 }
-
 .size-button-130 {
   height: 130px;
   width: 130px;
 }
-
 .size-button-180 {
   height: 180px;
   width: 180px;

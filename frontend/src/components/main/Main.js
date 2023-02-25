@@ -4,7 +4,7 @@ import "../../assets/css/Main.scss";
 
 function Main() {
   return (
-    <div>
+    <div className="h100">
       <h2>TC GALLERY &#40; PUBLIC CONTENT &#41;</h2>
     </div>
   );
