@@ -1,9 +1,10 @@
 /* ---------------------------------------------------------------------- */
-.bg-modal {
-  background-color: rgb(237, 85, 0, 0.2);
-}
 .bg-modal-content {
   background: linear-gradient(#F1F1F4, #FFFFFF);
+}
+.bg-modal-header {
+  background: linear-gradient(#ED5500, #FF6712);
+  color: #F1F1F4;
 }
 .bg-navbar {
   background: linear-gradient(#D5D5DB, #C4C4CB);

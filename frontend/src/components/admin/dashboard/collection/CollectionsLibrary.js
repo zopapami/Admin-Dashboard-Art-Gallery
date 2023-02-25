@@ -162,14 +162,14 @@ function CollectionsLibrary() {
           aria-hidden="true"
         >
           <div className="modal-dialog modal-dialog-scrollable">
-            <div className="modal-content bg-modal-content">
-              <div className="modal-header">
+            <div className="modal-content bg-modal-content border-0">
+              <div className="modal-header bg-modal-header border-0 shadow-sm">
                 <h1 className="modal-title fs-5" id="exampleModalLabel">
                   New Collection
                 </h1>
                 <button
                   type="button"
-                  className="btn-close"
+                  className="btn-close btn-close-white"
                   data-bs-dismiss="modal"
                   aria-label="Close"
                 ></button>
