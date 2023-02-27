@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import Dropzone from "react-dropzone-uploader";
+import { getDroppedOrSelectedFiles } from "html5-file-selector";
 // Firebase
 import {
   //deleteObject,
@@ -8,6 +10,7 @@ import {
   uploadBytes,
 } from "firebase/storage";
 // CSS
+import "react-dropzone-uploader/dist/styles.css";
 import "../../../../assets/css/Collection.scss";
 // Services
 import FirebaseService from "../../../../services/firebase-service.js";
@@ -28,6 +31,7 @@ function CollectionsLibrary() {
   const [currentCollection, setCurrentCollection] = useState(null);
   const [currentIndex, setCurrentIndex] = useState(-1);
   const [image, setImage] = useState(null);
+  const [loader, setLoader] = useState(false);
 
   // retrieve all Collections
   const retrieveCollections = () => {
@@ -64,13 +68,10 @@ function CollectionsLibrary() {
     const { name, value } = e.target;
     setCollection({ ...collection, [name]: value });
   };
-  const handleImageInput = (e) => {
-    const file = e.target.files[0];
-    setImage(file);
-  };
 
   // save Collection
   const handleCollection = () => {
+    setLoader(true);
     const imageRef = ref(FirebaseService.storage, `collections/${image.name}`);
     // save to storage
     uploadBytes(imageRef, image)
@@ -98,10 +99,12 @@ function CollectionsLibrary() {
                 });
                 console.log("The new Collection:", res.data);
                 setCollection(initialCollectionState);
+                refreshLibrary();
               })
               .catch((err) => {
                 console.log("Error while creating the new Collection:", err);
               });
+            setLoader(false);
           })
           .catch((err) => {
             console.log("Error while downloading:", err);
@@ -136,6 +139,49 @@ function CollectionsLibrary() {
       .catch((err) => {
         console.log("Error:", err);
       });
+  };
+
+  // Dropzone
+  const onFileChange = ({ file }, status) => {
+    console.log(status, file);
+  };
+  const clearDropzone = (file, allFiles) => {
+    allFiles.forEach((f) => f.remove());
+  };
+  const getFilesFromEvent = (e) => {
+    return new Promise((resolve) => {
+      getDroppedOrSelectedFiles(e).then((chosenFiles) => {
+        resolve(
+          chosenFiles.map((f) => {
+            const file = f.fileObject;
+            setImage(file);
+            return f.fileObject;
+          })
+        );
+      });
+    });
+  };
+  const selectFileInput = ({ onFiles, getFilesFromEvent }) => {
+    return (
+      <label className="mt-5">
+        {"Drop file here or Click here to select file"}
+        <input
+          style={{ display: "none" }}
+          type="file"
+          accept="images/*"
+          multiple={false}
+          className="form-control"
+          id="imageURL"
+          required
+          onChange={(e) => {
+            getFilesFromEvent(e).then((chosenFiles) => {
+              onFiles(chosenFiles);
+            });
+          }}
+          name="imageURL"
+        />
+      </label>
+    );
   };
 
   // Render
@@ -176,6 +222,7 @@ function CollectionsLibrary() {
               <button
                 type="button"
                 class="btn button"
+                data-bs-dismiss="modal"
                 onClick={removeAllCollections}
               >
                 Delete
@@ -220,11 +267,13 @@ function CollectionsLibrary() {
               </div>
               <div className="modal-body">
                 <div className="form-group">
-                  <label htmlFor="title">Title</label>
+                  <label htmlFor="title">Title*</label>
                   <input
                     type="text"
                     className="form-control"
                     id="title"
+                    required
+                    placeholder="Required"
                     value={collection.title}
                     onChange={handleInputChange}
                     name="title"
@@ -243,15 +292,13 @@ function CollectionsLibrary() {
                 </div>
                 <div className="form-group">
                   <label htmlFor="imageURL">Collection</label>
-                  <input
-                    type="file"
-                    accept="images/*"
-                    multiple={false}
-                    className="form-control"
-                    id="imageURL"
-                    required
-                    onChange={handleImageInput}
-                    name="imageURL"
+                  <Dropzone
+                    onChangeStatus={onFileChange}
+                    InputComponent={selectFileInput}
+                    getFilesFromEvent={getFilesFromEvent}
+                    accept="image/*"
+                    maxFiles={1}
+                    inputContent="Drop A File"
                   />
                 </div>
               </div>
@@ -259,6 +306,7 @@ function CollectionsLibrary() {
                 <button
                   type="button"
                   className="btn button"
+                  data-bs-dismiss="modal"
                   onClick={handleCollection}
                 >
                   Submit
@@ -277,25 +325,36 @@ function CollectionsLibrary() {
             onDoubleClick={() => navigate("..")}
             key={index}
           >
-            <img
-              src={collection.imageURL}
-              alt={collection.title}
-              className="h-collection"
-            />
-            <p></p>
-            <span>
-              <div>
-                <label>Title:</label> {collection.title}
+            {loader ? (
+              <div className="position-absolute top-50 start-50 translate-middle">
+                <div className="spinner-border" role="status">
+                  <span className="visually-hidden">Loading...</span>
+                </div>
               </div>
+            ) : (
               <div>
-                <label>Description:</label> {collection.description}
+                {" "}
+                <img
+                  src={collection.imageURL}
+                  alt={collection.title}
+                  className="h-collection"
+                />
+                <p></p>
+                <span>
+                  <div>
+                    <label>Title:</label> {collection.title}
+                  </div>
+                  <div>
+                    <label>Description:</label> {collection.description}
+                  </div>
+                </span>
               </div>
-            </span>
+            )}
           </div>
         ))}
       </div>
     </div>
   );
-}
+};
 
 export default CollectionsLibrary;

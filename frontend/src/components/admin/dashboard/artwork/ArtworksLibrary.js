@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import Dropzone from "react-dropzone-uploader";
+import { getDroppedOrSelectedFiles } from "html5-file-selector";
 // Firebase
 import {
   //deleteObject,
@@ -8,6 +10,7 @@ import {
   uploadBytes,
 } from "firebase/storage";
 // CSS
+import "react-dropzone-uploader/dist/styles.css";
 import "../../../../assets/css/Artwork.scss";
 // Services
 import FirebaseService from "../../../../services/firebase-service.js";
@@ -31,6 +34,7 @@ function ArtworksLibrary() {
   const [currentArtwork, setCurrentArtwork] = useState(null);
   const [currentIndex, setCurrentIndex] = useState(-1);
   const [image, setImage] = useState(null);
+  const [loader, setLoader] = useState(false);
 
   // retrieve all Artworks
   const retrieveArtworks = () => {
@@ -67,13 +71,10 @@ function ArtworksLibrary() {
     const { name, value } = e.target;
     setArtwork({ ...artwork, [name]: value });
   };
-  const handleImageInput = (e) => {
-    const file = e.target.files[0];
-    setImage(file);
-  };
 
   // save Artwork
   const handleArtwork = () => {
+    setLoader(true);
     const imageRef = ref(FirebaseService.storage, `artworks/${image.name}`);
     // save to storage
     uploadBytes(imageRef, image)
@@ -107,10 +108,12 @@ function ArtworksLibrary() {
                 });
                 console.log("The new Artwork:", res.data);
                 setArtwork(initialArtworkState);
+                refreshLibrary();
               })
               .catch((err) => {
                 console.log("Error while creating the new Artwork:", err);
               });
+            setLoader(false);
           })
           .catch((err) => {
             console.log("Error while downloading:", err);
@@ -147,49 +150,97 @@ function ArtworksLibrary() {
       });
   };
 
+  // Dropzone
+  const onFileChange = ({ file }, status) => {
+    console.log(status, file);
+  };
+  const clearDropzone = (file, allFiles) => {
+    allFiles.forEach((f) => f.remove());
+  };
+  const getFilesFromEvent = (e) => {
+    return new Promise((resolve) => {
+      getDroppedOrSelectedFiles(e).then((chosenFiles) => {
+        resolve(
+          chosenFiles.map((f) => {
+            const file = f.fileObject;
+            setImage(file);
+            return f.fileObject;
+          })
+        );
+      });
+    });
+  };
+  const selectFileInput = ({ onFiles, getFilesFromEvent }) => {
+    return (
+      <label className="mt-5">
+        {"Drop file here or Click here to select file"}
+        <input
+          style={{ display: "none" }}
+          type="file"
+          accept="images/*"
+          multiple={false}
+          className="form-control"
+          id="imageURL"
+          required
+          onChange={(e) => {
+            getFilesFromEvent(e).then((chosenFiles) => {
+              onFiles(chosenFiles);
+            });
+          }}
+          name="imageURL"
+        />
+      </label>
+    );
+  };
+
   // Render
   return (
     <div>
       <button
         type="button"
-        class="btn button float-end"
+        className="btn button float-end"
         data-bs-toggle="modal"
         data-bs-target="#removeModal"
       >
         Clear Library
       </button>
       <div
-        class="modal fade"
+        className="modal fade"
         id="removeModal"
-        tabindex="-1"
+        tabIndex="-1"
         aria-labelledby="removeModalLabel"
         aria-hidden="true"
       >
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="removeModalLabel">
+        <div className="modal-dialog">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h5 className="modal-title" id="removeModalLabel">
                 Delete Artworks
               </h5>
               <button
                 type="button"
-                class="btn-close"
+                className="btn-close"
                 data-bs-dismiss="modal"
                 aria-label="Close"
               ></button>
             </div>
-            <div class="modal-body">
+            <div className="modal-body">
               Are you sure you want to delete all artworks?
             </div>
-            <div class="modal-footer">
+            <div className="modal-footer">
               <button
                 type="button"
-                class="btn button"
+                className="btn button"
+                data-bs-dismiss="modal"
                 onClick={removeAllArtworks}
               >
                 Delete
               </button>
-              <button type="button" class="btn button" data-bs-dismiss="modal">
+              <button
+                type="button"
+                className="btn button"
+                data-bs-dismiss="modal"
+              >
                 Cancel
               </button>
             </div>
@@ -229,11 +280,13 @@ function ArtworksLibrary() {
               </div>
               <div className="modal-body">
                 <div className="form-group">
-                  <label htmlFor="title">Title</label>
+                  <label htmlFor="title">Title*</label>
                   <input
                     type="text"
                     className="form-control"
                     id="title"
+                    required
+                    placeholder="Required"
                     value={artwork.title}
                     onChange={handleInputChange}
                     name="title"
@@ -285,15 +338,13 @@ function ArtworksLibrary() {
                 </div>
                 <div className="form-group">
                   <label htmlFor="imageURL">Artwork</label>
-                  <input
-                    type="file"
-                    accept="images/*"
-                    multiple={false}
-                    className="form-control"
-                    id="imageURL"
-                    required
-                    onChange={handleImageInput}
-                    name="imageURL"
+                  <Dropzone
+                    onChangeStatus={onFileChange}
+                    InputComponent={selectFileInput}
+                    getFilesFromEvent={getFilesFromEvent}
+                    accept="image/*"
+                    maxFiles={1}
+                    inputContent="Drop A File"
                   />
                 </div>
               </div>
@@ -301,6 +352,7 @@ function ArtworksLibrary() {
                 <button
                   type="button"
                   className="btn button"
+                  data-bs-dismiss="modal"
                   onClick={handleArtwork}
                 >
                   Submit
@@ -319,34 +371,45 @@ function ArtworksLibrary() {
             onDoubleClick={() => navigate("..")}
             key={index}
           >
-            <img
-              src={artwork.imageURL}
-              alt={artwork.title}
-              className="h-artwork"
-            />
-            <p></p>
-            <span>
-              <div>
-                <label>Title:</label> {artwork.title}
+            {loader ? (
+              <div className="position-absolute top-50 start-50 translate-middle">
+                <div className="spinner-border" role="status">
+                  <span className="visually-hidden">Loading...</span>
+                </div>
               </div>
+            ) : (
               <div>
-                <label>Description:</label> {artwork.description}
+                {" "}
+                <img
+                  src={artwork.imageURL}
+                  alt={artwork.title}
+                  className="h-artwork"
+                />
+                <p></p>
+                <span>
+                  <div>
+                    <label>Title:</label> {artwork.title}
+                  </div>
+                  <div>
+                    <label>Description:</label> {artwork.description}
+                  </div>
+                  <div>
+                    <label>Artist:</label> {artwork.artist}
+                  </div>
+                  <div>
+                    <label>Year:</label> {artwork.year}
+                  </div>
+                  <div>
+                    <label>Collection:</label> {artwork.category}
+                  </div>
+                </span>
               </div>
-              <div>
-                <label>Artist:</label> {artwork.artist}
-              </div>
-              <div>
-                <label>Year:</label> {artwork.year}
-              </div>
-              <div>
-                <label>Collection:</label> {artwork.category}
-              </div>
-            </span>
+            )}
           </div>
         ))}
       </div>
     </div>
   );
-}
+};
 
 export default ArtworksLibrary;
