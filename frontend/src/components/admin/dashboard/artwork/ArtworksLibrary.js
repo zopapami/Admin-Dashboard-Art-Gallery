@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Routes, Route, Link, useNavigate, useParams } from "react-router-dom";
+import { Routes, Route, Link, useNavigate } from "react-router-dom";
 import Dropzone from "react-dropzone-uploader";
 import { getDroppedOrSelectedFiles } from "html5-file-selector";
 // Firebase
@@ -35,8 +35,8 @@ function ArtworksLibrary() {
   const [currentIndex, setCurrentIndex] = useState(-1);
   const [image, setImage] = useState(null);
   const [loader, setLoader] = useState(false);
-  const [editArtwork, setEditArtwork] = useState(false);
-  const [message, setMessage] = useState("");
+  //const [editArtwork, setEditArtwork] = useState(false);
+  //const [message, setMessage] = useState("");
 
   // retrieve all Artworks
   const retrieveArtworks = () => {
@@ -190,7 +190,7 @@ function ArtworksLibrary() {
     ArtworkService.update(currentArtwork.id, currentArtwork)
       .then((res) => {
         console.log(res.data);
-        setMessage("The Artwork was updated successfully!");
+        //setMessage("The Artwork was updated successfully!");
       })
       .catch((err) => {
         console.log("Error while updating the Artwork:", err);
@@ -245,6 +245,7 @@ function ArtworksLibrary() {
   // Render
   return (
     <div>
+      {/*---------- Clear Library ----------*/}
       <button
         type="button"
         className="btn button float-end"
@@ -253,6 +254,7 @@ function ArtworksLibrary() {
       >
         Clear Library
       </button>
+      {/*---------- Clear Library Modal ----------*/}
       <div
         className="modal fade"
         id="removeModal"
@@ -296,8 +298,9 @@ function ArtworksLibrary() {
           </div>
         </div>
       </div>
-
+      {/*---------- Grid of Artworks ----------*/}
       <div className="grid-artworks p-5">
+        {/*---------- Add Artwork ----------*/}
         <button
           type="button"
           className="btn button size-button-130"
@@ -306,7 +309,7 @@ function ArtworksLibrary() {
         >
           <img src={Plus} alt="plus-icon" width="50" />
         </button>
-
+        {/*---------- Add Artwork Modal ----------*/}
         <div
           className="modal fade"
           id="exampleModal"
@@ -410,7 +413,7 @@ function ArtworksLibrary() {
             </div>
           </div>
         </div>
-
+        {/*---------- Display Artworks ----------*/}
         {artworks.map((artwork, index) => (
           <div
             id="artworks"
@@ -427,11 +430,13 @@ function ArtworksLibrary() {
               </div>
             ) : (
               <div>
+                {/*---------- Image of Artwork ----------*/}
                 <img
                   src={artwork.imageURL}
                   alt={artwork.title}
                   className="h-artwork"
                 />
+                {/*---------- Link to Edit Artwork ----------*/}
                 <Link to={artwork.id}>
                   <p
                     data-bs-toggle="modal"
@@ -439,6 +444,7 @@ function ArtworksLibrary() {
                     data-bs-backdrop="static"
                   ></p>
                 </Link>
+                {/*---------- Details of Artwork ----------*/}
                 <span>
                   <div>
                     <label>Title:</label> {artwork.title}
@@ -460,6 +466,7 @@ function ArtworksLibrary() {
                     <h6>click to edit</h6>
                   </div>
                 </span>
+                {/*---------- Routing to Edit Artwork Modal ----------*/}
                 <Routes>
                   <Route
                     path={`:${artwork.id}`}
