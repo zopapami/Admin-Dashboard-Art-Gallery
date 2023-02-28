@@ -191,6 +191,7 @@ function ArtworksLibrary() {
       .then((res) => {
         console.log(res.data);
         //setMessage("The Artwork was updated successfully!");
+        refreshLibrary();
       })
       .catch((err) => {
         console.log("Error while updating the Artwork:", err);
@@ -485,7 +486,7 @@ function ArtworksLibrary() {
                                 className="modal-title fs-5"
                                 id="editModalLabel"
                               >
-                                {artwork.title}
+                                Edit Artwork
                               </h1>
                               <button
                                 type="button"

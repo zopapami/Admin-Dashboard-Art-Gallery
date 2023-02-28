@@ -52,7 +52,7 @@ function Info() {
 
   // Render
   return (
-    <div className="h100 p-4">
+    <div className="h100 p-4 mx-5">
       <h4>WEBSITE DETAILS</h4>
       <div className="scrollbar">
         <form className="force-overflow">
@@ -149,7 +149,7 @@ function Info() {
       <button type="submit" className="btn button mx-2" onClick={updateInfo}>
         Save Changes
       </button>
-      <p>{message}</p>
+      <p className="float-end">{message}</p>
     </div>
   );
 }

@@ -37,7 +37,7 @@ function Login() {
     signInWithEmailAndPassword(FirebaseService.auth, email, password)
       .then((userCredential) => {
         const user = userCredential.user;
-        navigate("dashboard");
+        navigate("dashboard/gallery");
         console.log(user);
       })
       .catch((err) => {
@@ -65,47 +65,49 @@ function Login() {
               </Routes>
             </div>
           ) : (
-            <div className="bg-login h100">
-              <div className="card position-absolute margin-relative">
-                <form className="m-4">
-                  <div className="m-3 form-group">
-                    <label className="mb-1" htmlFor="email">
-                      Email Address
-                    </label>
-                    <input
-                      type="email"
-                      className="form-control"
-                      id="email-address"
-                      name="email"
-                      onChange={(e) => setEmail(e.target.value)}
-                      required
-                      placeholder="Email address"
-                    />
-                  </div>
-                  <div className="m-3 form-group">
-                    <label className="mb-1" htmlFor="password">
-                      Password
-                    </label>
-                    <input
-                      type="password"
-                      className="form-control"
-                      id="password"
-                      name="password"
-                      onChange={(e) => setPassword(e.target.value)}
-                      required
-                      placeholder="Password"
-                    />
-                  </div>
-                  <div className="m-3 form-group">
-                    <button
-                      type="submit"
-                      className="mt-2 btn button"
-                      onClick={onLogin}
-                    >
-                      LOGIN
-                    </button>
-                  </div>
-                </form>
+            <div className="position-relative h100">
+              <div className="card bg-login shadow">
+                <div className="">
+                  <form className="card w float-end shadow">
+                    <div className="m-3 form-group">
+                      <label className="mb-1" htmlFor="email">
+                        Email Address
+                      </label>
+                      <input
+                        type="email"
+                        className="form-control"
+                        id="email-address"
+                        name="email"
+                        onChange={(e) => setEmail(e.target.value)}
+                        required
+                        placeholder="Email address"
+                      />
+                    </div>
+                    <div className="m-3 form-group">
+                      <label className="mb-1" htmlFor="password">
+                        Password
+                      </label>
+                      <input
+                        type="password"
+                        className="form-control"
+                        id="password"
+                        name="password"
+                        onChange={(e) => setPassword(e.target.value)}
+                        required
+                        placeholder="Password"
+                      />
+                    </div>
+                    <div className="m-3 form-group">
+                      <button
+                        type="submit"
+                        className="mt-2 btn button"
+                        onClick={onLogin}
+                      >
+                        LOGIN
+                      </button>
+                    </div>
+                  </form>
+                </div>
               </div>
             </div>
           )}

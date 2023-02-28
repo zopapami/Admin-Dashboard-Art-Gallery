@@ -28,10 +28,10 @@ function Dashboard() {
     <div className="grid-dashboard h100">
       <nav className="navbar-nav navbar-dark bg-dashboard mr-auto p-4">
         <li className="nav-item">
-          <p className="navbar-brand navbar-text">DASHBOARD</p>
+          <p className="navbar-text">DASHBOARD</p>
         </li>
         <li className="nav-item">
-          <Link to="home" className="nav-link navbar-text">
+          <Link to="home" className="navbar-brand nav-link navbar-text">
             HOME
           </Link>
         </li>
