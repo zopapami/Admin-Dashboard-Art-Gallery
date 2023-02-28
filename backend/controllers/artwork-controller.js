@@ -73,8 +73,7 @@ exports.update = (req, res) => {
       if (!data) {
         res.status(404).send({ message: `404 Not Found. Cannot update Artwork with id: ${id}.` });
       } else {
-        res.send(data);
-        //res.send({ message: "Artwork was updated successfully!" });
+        res.send({ message: "Artwork was updated successfully!" });
       };
     })
     .catch((err) => {

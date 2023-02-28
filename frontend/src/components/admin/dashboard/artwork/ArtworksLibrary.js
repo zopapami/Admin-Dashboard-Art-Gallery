@@ -77,8 +77,7 @@ function ArtworksLibrary() {
   };
   const handleInputChangeCurrent = (e) => {
     const { name, value } = e.target;
-    setCurrentArtwork({ ...currentArtwork, [name]: value });
-    console.log(currentArtwork.title);
+    currentArtwork[name] = value;
   };
 
   // save Artwork
@@ -188,15 +187,13 @@ function ArtworksLibrary() {
 
   // update an Artwork by id
   const updateArtwork = () => {
-    console.log(currentArtwork.title);
-    ArtworkService.update(currentArtwork.id, currentArtwork.title)
+    ArtworkService.update(currentArtwork.id, currentArtwork)
       .then((res) => {
-        console.log("res", res.data.title);
-        console.log("current", currentArtwork.title);
+        console.log(res.data);
         setMessage("The Artwork was updated successfully!");
       })
       .catch((err) => {
-        console.log(err);
+        console.log("Error while updating the Artwork:", err);
       });
   };
 
@@ -220,11 +217,20 @@ function ArtworksLibrary() {
       .catch((err) => {
         console.log("Error while deleting the Artwork from storage:", err);
       });
-      
   };
 
   // delete all Artworks from database
   const removeAllArtworks = () => {
+    setLoader(true);
+    let i = 0;
+    for (i in artworks) {
+      const imageRef = ref(FirebaseService.storage, artworks[i].imageURL);
+      deleteObject(imageRef)
+        .then(() => {})
+        .catch((err) => {
+          console.log("Error while deleting the artworks from storage:", err);
+        });
+    }
     ArtworkService.removeAll()
       .then((res) => {
         console.log("All artworks have been removed:", res.data);
@@ -233,6 +239,7 @@ function ArtworksLibrary() {
       .catch((err) => {
         console.log("Error while deleting the artworks:", err);
       });
+    setLoader(false);
   };
 
   // Render
