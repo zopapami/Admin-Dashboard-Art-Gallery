@@ -4,7 +4,7 @@ import Dropzone from "react-dropzone-uploader";
 import { getDroppedOrSelectedFiles } from "html5-file-selector";
 // Firebase
 import {
-  //deleteObject,
+  deleteObject,
   getDownloadURL,
   ref,
   uploadBytes,
@@ -191,8 +191,8 @@ function ArtworksLibrary() {
     console.log(currentArtwork.title);
     ArtworkService.update(currentArtwork.id, currentArtwork.title)
       .then((res) => {
-        console.log("res",res.data.title);
-        console.log("current",currentArtwork.title);
+        console.log("res", res.data.title);
+        console.log("current", currentArtwork.title);
         setMessage("The Artwork was updated successfully!");
       })
       .catch((err) => {
@@ -202,29 +202,26 @@ function ArtworksLibrary() {
 
   // delete an Artwork by id
   const deleteArtwork = () => {
-    ArtworkService.remove(currentArtwork.id)
-      .then((res) => {
-        console.log(res.data);
-        navigate("");
-        refreshLibrary();
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-  /*
-  // delete Artwork File from storage
-  const deleteImage = () => {
-    const imageRef = ref(FirebaseService.storage, `artworks/${image.name}`);
+    setLoader(true);
+    const imageRef = ref(FirebaseService.storage, currentArtwork.imageURL);
     deleteObject(imageRef)
       .then(() => {
-        console.log("Artwork file deleted successfully!");
+        console.log("Artwork file deleted successfully from storage!");
+        ArtworkService.remove(currentArtwork.id)
+          .then((res) => {
+            console.log(res.data);
+            refreshLibrary();
+          })
+          .catch((err) => {
+            console.log("Error while deleting the Artwork from database:", err);
+          });
+        setLoader(false);
       })
       .catch((err) => {
-        console.log("Error:", err);
+        console.log("Error while deleting the Artwork from storage:", err);
       });
+      
   };
-  */
 
   // delete all Artworks from database
   const removeAllArtworks = () => {
