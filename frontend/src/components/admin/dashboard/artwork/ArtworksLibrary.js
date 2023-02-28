@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { Routes, Route, Link, useNavigate, useParams } from "react-router-dom";
 import Dropzone from "react-dropzone-uploader";
 import { getDroppedOrSelectedFiles } from "html5-file-selector";
 // Firebase
@@ -19,7 +19,7 @@ import ArtworkService from "../../../../services/artwork-service.js";
 import Plus from "../../../../assets/img/plus-icon.png";
 
 function ArtworksLibrary() {
-  const navigate = useNavigate();
+  let navigate = useNavigate();
   const initialArtworkState = {
     id: null,
     artist: "",
@@ -31,10 +31,12 @@ function ArtworksLibrary() {
   };
   const [artwork, setArtwork] = useState(initialArtworkState);
   const [artworks, setArtworks] = useState([]);
-  const [currentArtwork, setCurrentArtwork] = useState(null);
+  const [currentArtwork, setCurrentArtwork] = useState(initialArtworkState);
   const [currentIndex, setCurrentIndex] = useState(-1);
   const [image, setImage] = useState(null);
   const [loader, setLoader] = useState(false);
+  const [editArtwork, setEditArtwork] = useState(false);
+  const [message, setMessage] = useState("");
 
   // retrieve all Artworks
   const retrieveArtworks = () => {
@@ -55,8 +57,10 @@ function ArtworksLibrary() {
 
   // refresh Artworks Library
   const refreshLibrary = () => {
+    navigate("");
     retrieveArtworks();
-    setCurrentArtwork(null);
+    setArtwork(initialArtworkState);
+    setCurrentArtwork(initialArtworkState);
     setCurrentIndex(-1);
   };
 
@@ -70,6 +74,11 @@ function ArtworksLibrary() {
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setArtwork({ ...artwork, [name]: value });
+  };
+  const handleInputChangeCurrent = (e) => {
+    const { name, value } = e.target;
+    setCurrentArtwork({ ...currentArtwork, [name]: value });
+    console.log(currentArtwork.title);
   };
 
   // save Artwork
@@ -97,17 +106,8 @@ function ArtworksLibrary() {
             // save to database
             ArtworkService.create(data)
               .then((res) => {
-                setArtwork({
-                  id: res.data.id,
-                  artist: res.data.artist,
-                  category: res.data.category,
-                  description: res.data.description,
-                  imageURL: res.data.imageURL,
-                  title: res.data.title,
-                  year: res.data.year,
-                });
+                artwork.id = res.data.id;
                 console.log("The new Artwork:", res.data);
-                setArtwork(initialArtworkState);
                 refreshLibrary();
               })
               .catch((err) => {
@@ -124,39 +124,15 @@ function ArtworksLibrary() {
       });
   };
 
-  /*
-  // delete Artwork File from storage
-  const deleteImage = () => {
-    const imageRef = ref(FirebaseService.storage, `artworks/${image.name}`);
-    deleteObject(imageRef)
-      .then(() => {
-        console.log("Artwork file deleted successfully!");
-      })
-      .catch((err) => {
-        console.log("Error:", err);
-      });
-  };
-  */
-
-  // delete all Artworks from database
-  const removeAllArtworks = () => {
-    ArtworkService.removeAll()
-      .then((res) => {
-        console.log("All artworks have been removed:", res.data);
-        refreshLibrary();
-      })
-      .catch((err) => {
-        console.log("Error:", err);
-      });
-  };
-
   // Dropzone
   const onFileChange = ({ file }, status) => {
     console.log(status, file);
   };
+  /*
   const clearDropzone = (file, allFiles) => {
     allFiles.forEach((f) => f.remove());
   };
+  */
   const getFilesFromEvent = (e) => {
     return new Promise((resolve) => {
       getDroppedOrSelectedFiles(e).then((chosenFiles) => {
@@ -191,6 +167,75 @@ function ArtworksLibrary() {
         />
       </label>
     );
+  };
+
+  /*
+  // retrieve an Artwork by id
+  const getArtwork = (id) => {
+    ArtworkService.get(id)
+      .then((res) => {
+        setCurrentArtwork(res.data);
+        console.log(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+  useEffect(() => {
+    if (id) getArtwork(id);
+  }, [id]);
+  */
+
+  // update an Artwork by id
+  const updateArtwork = () => {
+    console.log(currentArtwork.title);
+    ArtworkService.update(currentArtwork.id, currentArtwork.title)
+      .then((res) => {
+        console.log("res",res.data.title);
+        console.log("current",currentArtwork.title);
+        setMessage("The Artwork was updated successfully!");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  // delete an Artwork by id
+  const deleteArtwork = () => {
+    ArtworkService.remove(currentArtwork.id)
+      .then((res) => {
+        console.log(res.data);
+        navigate("");
+        refreshLibrary();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+  /*
+  // delete Artwork File from storage
+  const deleteImage = () => {
+    const imageRef = ref(FirebaseService.storage, `artworks/${image.name}`);
+    deleteObject(imageRef)
+      .then(() => {
+        console.log("Artwork file deleted successfully!");
+      })
+      .catch((err) => {
+        console.log("Error:", err);
+      });
+  };
+  */
+
+  // delete all Artworks from database
+  const removeAllArtworks = () => {
+    ArtworkService.removeAll()
+      .then((res) => {
+        console.log("All artworks have been removed:", res.data);
+        refreshLibrary();
+      })
+      .catch((err) => {
+        console.log("Error while deleting the artworks:", err);
+      });
   };
 
   // Render
@@ -367,8 +412,7 @@ function ArtworksLibrary() {
             id="artworks"
             className={index === currentIndex ? "active" : ""}
             onMouseOver={() => setActiveArtwork(artwork, index)}
-            onMouseOut={() => setActiveArtwork(null, -1)}
-            onDoubleClick={() => navigate("..")}
+            onMouseOut={() => setActiveArtwork(initialArtworkState, -1)}
             key={index}
           >
             {loader ? (
@@ -379,13 +423,18 @@ function ArtworksLibrary() {
               </div>
             ) : (
               <div>
-                {" "}
                 <img
                   src={artwork.imageURL}
                   alt={artwork.title}
                   className="h-artwork"
                 />
-                <p></p>
+                <Link to={artwork.id}>
+                  <p
+                    data-bs-toggle="modal"
+                    data-bs-target="#editModal"
+                    data-bs-backdrop="static"
+                  ></p>
+                </Link>
                 <span>
                   <div>
                     <label>Title:</label> {artwork.title}
@@ -402,7 +451,120 @@ function ArtworksLibrary() {
                   <div>
                     <label>Collection:</label> {artwork.category}
                   </div>
+                  <br></br>
+                  <div>
+                    <h6>click to edit</h6>
+                  </div>
                 </span>
+                <Routes>
+                  <Route
+                    path={`:${artwork.id}`}
+                    element={
+                      <div
+                        className="modal fade"
+                        id="editModal"
+                        tabIndex="-1"
+                        aria-labelledby="editModalLabel"
+                        aria-hidden="true"
+                      >
+                        <div className="modal-dialog modal-dialog-scrollable">
+                          <div className="modal-content bg-modal-content border-0">
+                            <div className="modal-header bg-modal-header border-0 shadow-sm">
+                              <h1
+                                className="modal-title fs-5"
+                                id="editModalLabel"
+                              >
+                                {artwork.title}
+                              </h1>
+                              <button
+                                type="button"
+                                className="btn-close btn-close-white"
+                                data-bs-dismiss="modal"
+                                aria-label="Close"
+                              ></button>
+                            </div>
+                            <div className="modal-body">
+                              <div className="form-group">
+                                <label htmlFor="title">Title*</label>
+                                <input
+                                  type="text"
+                                  className="form-control"
+                                  id="title"
+                                  required
+                                  placeholder={artwork.title}
+                                  onChange={handleInputChangeCurrent}
+                                  name="title"
+                                />
+                              </div>
+                              <div className="form-group">
+                                <label htmlFor="description">Description</label>
+                                <input
+                                  type="text"
+                                  className="form-control"
+                                  id="description"
+                                  placeholder={artwork.description}
+                                  onChange={handleInputChangeCurrent}
+                                  name="description"
+                                />
+                              </div>
+                              <div className="form-group">
+                                <label htmlFor="artist">Artist</label>
+                                <input
+                                  type="text"
+                                  className="form-control"
+                                  id="artist"
+                                  placeholder={artwork.artist}
+                                  onChange={handleInputChangeCurrent}
+                                  name="artist"
+                                />
+                              </div>
+                              <div className="form-group">
+                                <label htmlFor="year">Year</label>
+                                <input
+                                  type="text"
+                                  className="form-control"
+                                  id="year"
+                                  placeholder={artwork.year}
+                                  onChange={handleInputChangeCurrent}
+                                  name="year"
+                                />
+                              </div>
+                              <div className="form-group">
+                                <label htmlFor="collection">Collection</label>
+                                <input
+                                  type="text"
+                                  className="form-control"
+                                  id="collection"
+                                  placeholder={artwork.category}
+                                  onChange={handleInputChangeCurrent}
+                                  name="category"
+                                />
+                              </div>
+                            </div>
+                            <div className="modal-footer">
+                              <button
+                                type="button"
+                                className="btn button"
+                                data-bs-dismiss="modal"
+                                onClick={updateArtwork}
+                              >
+                                Update
+                              </button>
+                              <button
+                                type="button"
+                                className="btn button"
+                                data-bs-dismiss="modal"
+                                onClick={deleteArtwork}
+                              >
+                                Delete
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    }
+                  />
+                </Routes>
               </div>
             )}
           </div>
@@ -410,6 +572,6 @@ function ArtworksLibrary() {
       </div>
     </div>
   );
-};
+}
 
 export default ArtworksLibrary;

@@ -26,7 +26,7 @@ function Gallery() {
       </nav>
       <div className="p-4">
         <Routes>
-          <Route path="artworks" element={<ArtworksLibrary />} />
+          <Route path="artworks/*" element={<ArtworksLibrary />} />
           <Route path="collections" element={<CollectionsLibrary />} />
         </Routes>
       </div>

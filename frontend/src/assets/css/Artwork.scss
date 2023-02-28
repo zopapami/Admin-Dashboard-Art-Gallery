@@ -28,6 +28,7 @@
       z-index: 5;
     }
     & span {
+      animation: cssAnimation 0s 0.4s forwards;
       background: linear-gradient(#373741, #474753);
       border-radius: 3px;
       color: #F1F1F4;
@@ -37,11 +38,22 @@
       position: absolute;
       text-decoration: none;
       top: 50px;
+      visibility: hidden;
       width: max-content;
       z-index: 10;
       & label {
         font-weight: 600;
       }
+      & h6 {
+        color: #C4C4CB;
+        font-size: 14px;
+        font-style: italic;
+        font-weight: 100;
+      }
     }
   }
+}
+
+@keyframes cssAnimation {
+  to   { visibility: visible; }
 }

@@ -21,7 +21,7 @@ exports.create = (req, res) => {
       res.send(data);
     })
     .catch((err) => {
-      res.status(500).send({ message: "500 Internal Server Error. Some error occurred while creating the Collection." }, err);
+      res.status(500).send({ message: "500 Internal Server Error. Some error occurred while creating the Collection." }, err.toString());
     });
 };
 
@@ -32,7 +32,7 @@ exports.findAll = (req, res) => {
       res.send(data);
     })
     .catch((err) => {
-      res.status(500).send({ message: "500 Internal Server Error while retrieving all collections." }, err);
+      res.status(500).send({ message: "500 Internal Server Error while retrieving all collections." }, err.toString());
     });
 };
 
@@ -50,7 +50,7 @@ exports.findOne = (req, res) => {
       };
     })
     .catch((err) => {
-      res.status(500).send({ message: `500 Internal Server Error while retrieving Collection with id: ${id}.` }, err);
+      res.status(500).send({ message: `500 Internal Server Error while retrieving Collection with id: ${id}.` }, err.toString());
     });
 };
 
@@ -73,7 +73,7 @@ exports.update = (req, res) => {
       };
     })
     .catch((err) => {
-      res.status(500).send({ message: `500 Internal Server Error. Cannot update Collection with id: ${id}.` }, err);
+      res.status(500).send({ message: `500 Internal Server Error. Cannot update Collection with id: ${id}.` }, err.toString());
     });
 };
 
@@ -91,7 +91,7 @@ exports.delete = (req, res) => {
       };
     })
     .catch((err) => {
-      res.status(500).send({ message: `500 Internal Server Error. Cannot delete Collection with id: ${id}.` }, err);
+      res.status(500).send({ message: `500 Internal Server Error. Cannot delete Collection with id: ${id}.` }, err.toString());
     });
 };
 
@@ -102,6 +102,6 @@ exports.deleteAll = (req, res) => {
     res.send({ message: `${data.deletedCount} collections were deleted successfully!` });
   })
   .catch((err) => {
-    res.status(500).send({ message: "500 Internal Server Error while deleting all collections." }, err);
+    res.status(500).send({ message: "500 Internal Server Error while deleting all collections." }, err.toString());
   });
 };

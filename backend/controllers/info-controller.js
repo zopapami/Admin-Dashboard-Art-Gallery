@@ -8,7 +8,7 @@ exports.findAll = (req, res) => {
       res.send(data);
     })
     .catch((err) => {
-      res.status(500).send({ message: "500 Internal Server Error while retrieving info." }, err);
+      res.status(500).send({ message: "500 Internal Server Error while retrieving info." }, err.toString());
     });
 };
 
@@ -31,6 +31,6 @@ exports.update = (req, res) => {
       };
     })
     .catch((err) => {
-      res.status(500).send({ message: "500 Internal Server Error. Cannot update Info." }, err);
+      res.status(500).send({ message: "500 Internal Server Error. Cannot update Info." }, err.toString());
     });
 };

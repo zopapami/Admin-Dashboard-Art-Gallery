@@ -24,7 +24,7 @@ exports.create = (req, res) => {
       res.send(data);
     })
     .catch((err) => {
-      res.status(500).send({ message: "500 Internal Server Error. Some error occurred while creating the Artwork." }, err);
+      res.status(500).send({ message: "500 Internal Server Error. Some error occurred while creating the Artwork." }, err.toString());
     });
 };
 
@@ -35,7 +35,7 @@ exports.findAll = (req, res) => {
       res.send(data);
     })
     .catch((err) => {
-      res.status(500).send({ message: "500 Internal Server Error while retrieving all artwork." }, err);
+      res.status(500).send({ message: "500 Internal Server Error while retrieving all artwork." }, err.toString());
     });
 };
 
@@ -54,7 +54,7 @@ exports.findOne = (req, res) => {
       };
     })
     .catch((err) => {
-      res.status(500).send({ message: `500 Internal Server Error while retrieving Artwork with id: ${id}.` }, err);
+      res.status(500).send({ message: `500 Internal Server Error while retrieving Artwork with id: ${id}.` }, err.toString());
     });
 };
 
@@ -73,11 +73,12 @@ exports.update = (req, res) => {
       if (!data) {
         res.status(404).send({ message: `404 Not Found. Cannot update Artwork with id: ${id}.` });
       } else {
-        res.send({ message: "Artwork was updated successfully!" });
+        res.send(data);
+        //res.send({ message: "Artwork was updated successfully!" });
       };
     })
     .catch((err) => {
-      res.status(500).send({ message: `500 Internal Server Error. Cannot update Artwork with id: ${id}.` }, err);
+      res.status(500).send({ message: `500 Internal Server Error. Cannot update Artwork with id: ${id}.` }, err.toString());
     });
 };
 
@@ -95,7 +96,7 @@ exports.delete = (req, res) => {
       };
     })
     .catch((err) => {
-      res.status(500).send({ message: `500 Internal Server Error. Cannot delete Artwork with id: ${id}.` }, err);
+      res.status(500).send({ message: `500 Internal Server Error. Cannot delete Artwork with id: ${id}.` }, err.toString());
     });
 };
 
@@ -106,6 +107,6 @@ exports.deleteAll = (req, res) => {
     res.send({ message: `${data.deletedCount} artworks were deleted successfully!` });
   })
   .catch((err) => {
-    res.status(500).send({ message: "500 Internal Server Error while deleting all artworks." }, err);
+    res.status(500).send({ message: "500 Internal Server Error while deleting all artworks." }, err.toString());
   });
 };

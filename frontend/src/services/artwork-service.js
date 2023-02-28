@@ -10,17 +10,17 @@ const getAll = () => {
   return http.admin.get("/gallery/artworks");
 };
 
-// retrieve a Artwork by id
+// retrieve an Artwork by id
 const get = (id) => {
   return http.admin.get(`/gallery/artworks/${id}`);
 };
 
-// update a Artwork by id
+// update an Artwork by id
 const update = (id, data) => {
   return http.admin.put(`/gallery/artworks/${id}`, data);
 };
 
-// delete a Artwork by id
+// delete an Artwork by id
 const remove = (id) => {
   return http.admin.delete(`/gallery/artworks/${id}`);
 };

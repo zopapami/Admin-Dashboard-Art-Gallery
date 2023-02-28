@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 // Services
-import ArtworkService from "../../../services/artwork-service.js";
+import ArtworkService from "../../../../services/artwork-service.js";
 
-function Artwork() {
-  //props
+function Artwork(props) {
+  
   const { id } = useParams();
   let navigate = useNavigate();
 
@@ -55,7 +55,7 @@ function Artwork() {
     ArtworkService.remove(currentArtwork.id)
       .then((response) => {
         console.log(response.data);
-        navigate("/artworks");
+        navigate("..");
       })
       .catch((e) => {
         console.log(e);
@@ -64,8 +64,8 @@ function Artwork() {
 
   return (
     <div>
-      {currentArtwork ? (
-        <div className="edit-form">
+      {currentArtwork && (
+        <div>
           <h4>Artwork</h4>
           <form>
             <div className="form-group">
@@ -92,23 +92,18 @@ function Artwork() {
             </div>
           </form>
 
-          <button className="badge badge-danger mr-2" onClick={deleteArtwork}>
+          <button className="btn button mr-2" onClick={deleteArtwork}>
             Delete
           </button>
 
           <button
             type="submit"
-            className="badge badge-success"
+            className="btn button"
             onClick={updateArtwork}
           >
             Update
           </button>
           <p>{message}</p>
-        </div>
-      ) : (
-        <div>
-          <br />
-          <p>Please click on a Artwork...</p>
         </div>
       )}
     </div>
