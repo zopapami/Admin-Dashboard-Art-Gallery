@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, Route, Routes, useNavigate } from "react-router-dom";
 import Dropzone from "react-dropzone-uploader";
 import { getDroppedOrSelectedFiles } from "html5-file-selector";
 // Firebase
 import {
-  //deleteObject,
+  deleteObject,
   getDownloadURL,
   ref,
   uploadBytes,
@@ -19,19 +19,21 @@ import CollectionService from "../../../../services/collection-service.js";
 import Plus from "../../../../assets/img/plus-icon.png";
 
 function CollectionsLibrary() {
-  const navigate = useNavigate();
+  let navigate = useNavigate();
   const initialCollectionState = {
     id: null,
     description: "",
     imageURL: "",
-    title: "",
+    title: ""
   };
   const [collection, setCollection] = useState(initialCollectionState);
   const [collections, setCollections] = useState([]);
-  const [currentCollection, setCurrentCollection] = useState(null);
+  const [currentCollection, setCurrentCollection] = useState(initialCollectionState);
   const [currentIndex, setCurrentIndex] = useState(-1);
   const [image, setImage] = useState(null);
   const [loader, setLoader] = useState(false);
+  //const [editCollection, setEditCollection] = useState(false);
+  //const [message, setMessage] = useState("");
 
   // retrieve all Collections
   const retrieveCollections = () => {
@@ -52,8 +54,10 @@ function CollectionsLibrary() {
 
   // refresh Collections Library
   const refreshLibrary = () => {
+    navigate("");
     retrieveCollections();
-    setCurrentCollection(null);
+    setCollection(initialCollectionState);
+    setCurrentCollection(initialCollectionState);
     setCurrentIndex(-1);
   };
 
@@ -67,6 +71,10 @@ function CollectionsLibrary() {
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setCollection({ ...collection, [name]: value });
+  };
+  const handleInputChangeCurrent = (e) => {
+    const { name, value } = e.target;
+    currentCollection[name] = value;
   };
 
   // save Collection
@@ -86,19 +94,13 @@ function CollectionsLibrary() {
             let data = {
               description: collection.description,
               imageURL: collection.imageURL,
-              title: collection.title,
+              title: collection.title
             };
             // save to database
             CollectionService.create(data)
               .then((res) => {
-                setCollection({
-                  id: res.data.id,
-                  description: res.data.description,
-                  imageURL: res.data.imageURL,
-                  title: res.data.title,
-                });
+                collection.id = res.data.id;
                 console.log("The new Collection:", res.data);
-                setCollection(initialCollectionState);
                 refreshLibrary();
               })
               .catch((err) => {
@@ -115,39 +117,15 @@ function CollectionsLibrary() {
       });
   };
 
-  /*
-  // delete Collection File from storage
-  const deleteImage = () => {
-    const imageRef = ref(FirebaseService.storage, `collections/${image.name}`);
-    deleteObject(imageRef)
-      .then(() => {
-        console.log("Collection file deleted successfully!");
-      })
-      .catch((err) => {
-        console.log("Error:", err);
-      });
-  };
-  */
-
-  // delete all Collections from database
-  const removeAllCollections = () => {
-    CollectionService.removeAll()
-      .then((res) => {
-        console.log("All collections have been removed:", res.data);
-        refreshLibrary();
-      })
-      .catch((err) => {
-        console.log("Error:", err);
-      });
-  };
-
   // Dropzone
   const onFileChange = ({ file }, status) => {
     console.log(status, file);
   };
+  /*
   const clearDropzone = (file, allFiles) => {
     allFiles.forEach((f) => f.remove());
   };
+  */
   const getFilesFromEvent = (e) => {
     return new Promise((resolve) => {
       getDroppedOrSelectedFiles(e).then((chosenFiles) => {
@@ -184,78 +162,159 @@ function CollectionsLibrary() {
     );
   };
 
+  /*
+  // retrieve an Collection by id
+  const getCollection = (id) => {
+    CollectionService.get(id)
+      .then((res) => {
+        setCurrentCollection(res.data);
+        console.log(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+  useEffect(() => {
+    if (id) getCollection(id);
+  }, [id]);
+  */
+
+  // update an Collection by id
+  const updateCollection = () => {
+    CollectionService.update(currentCollection.id, currentCollection)
+      .then((res) => {
+        console.log(res.data);
+        //setMessage("The Collection was updated successfully!");
+      })
+      .catch((err) => {
+        console.log("Error while updating the Collection:", err);
+      });
+  };
+
+  // delete an Collection by id
+  const deleteCollection = () => {
+    setLoader(true);
+    const imageRef = ref(FirebaseService.storage, currentCollection.imageURL);
+    deleteObject(imageRef)
+      .then(() => {
+        console.log("Collection file deleted successfully from storage!");
+        CollectionService.remove(currentCollection.id)
+          .then((res) => {
+            console.log(res.data);
+            refreshLibrary();
+          })
+          .catch((err) => {
+            console.log("Error while deleting the Collection from database:", err);
+          });
+        setLoader(false);
+      })
+      .catch((err) => {
+        console.log("Error while deleting the Collection from storage:", err);
+      });
+  };
+
+  // delete all Collections from database
+  const removeAllCollections = () => {
+    setLoader(true);
+    let i = 0;
+    for (i in collections) {
+      const imageRef = ref(FirebaseService.storage, collections[i].imageURL);
+      deleteObject(imageRef)
+        .then(() => {})
+        .catch((err) => {
+          console.log("Error while deleting the collections from storage:", err);
+        });
+    }
+    CollectionService.removeAll()
+      .then((res) => {
+        console.log("All collections have been removed:", res.data);
+        refreshLibrary();
+      })
+      .catch((err) => {
+        console.log("Error while deleting the collections:", err);
+      });
+    setLoader(false);
+  };
+
   // Render
   return (
     <div>
+      {/*---------- Clear Library ----------*/}
       <button
         type="button"
-        class="btn button float-end"
+        className="btn button float-end"
         data-bs-toggle="modal"
-        data-bs-target="#removeModal"
+        data-bs-target="#removeCModal"
       >
         Clear Library
       </button>
+      {/*---------- Clear Library Modal ----------*/}
       <div
-        class="modal fade"
-        id="removeModal"
-        tabindex="-1"
-        aria-labelledby="removeModalLabel"
+        className="modal fade"
+        id="removeCModal"
+        tabIndex="-1"
+        aria-labelledby="removeCModalLabel"
         aria-hidden="true"
       >
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="removeModalLabel">
+        <div className="modal-dialog">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h5 className="modal-title" id="removeCModalLabel">
                 Delete Collections
               </h5>
               <button
                 type="button"
-                class="btn-close"
+                className="btn-close"
                 data-bs-dismiss="modal"
                 aria-label="Close"
               ></button>
             </div>
-            <div class="modal-body">
+            <div className="modal-body">
               Are you sure you want to delete all collections?
             </div>
-            <div class="modal-footer">
+            <div className="modal-footer">
               <button
                 type="button"
-                class="btn button"
+                className="btn button"
                 data-bs-dismiss="modal"
                 onClick={removeAllCollections}
               >
                 Delete
               </button>
-              <button type="button" class="btn button" data-bs-dismiss="modal">
+              <button
+                type="button"
+                className="btn button"
+                data-bs-dismiss="modal"
+              >
                 Cancel
               </button>
             </div>
           </div>
         </div>
       </div>
-
+      {/*---------- Grid of Collections ----------*/}
       <div className="grid-collections p-5">
+        {/*---------- Add Collection ----------*/}
         <button
           type="button"
           className="btn button size-button-180"
           data-bs-toggle="modal"
-          data-bs-target="#exampleModal"
+          data-bs-target="#exampleCModal"
         >
-          <img src={Plus} alt="plus-icon" width="70" />
+          <img src={Plus} alt="plus-icon" width="50" />
         </button>
-
+        {/*---------- Add Collection Modal ----------*/}
         <div
-          className="modal fade bg-modal"
-          id="exampleModal"
+          className="modal fade"
+          id="exampleCModal"
           tabIndex="-1"
-          aria-labelledby="exampleModalLabel"
+          aria-labelledby="exampleCModalLabel"
           aria-hidden="true"
         >
           <div className="modal-dialog modal-dialog-scrollable">
             <div className="modal-content bg-modal-content border-0">
               <div className="modal-header bg-modal-header border-0 shadow-sm">
-                <h1 className="modal-title fs-5" id="exampleModalLabel">
+                <h1 className="modal-title fs-5" id="exampleCModalLabel">
                   New Collection
                 </h1>
                 <button
@@ -315,14 +374,13 @@ function CollectionsLibrary() {
             </div>
           </div>
         </div>
-
+        {/*---------- Display Collections ----------*/}
         {collections.map((collection, index) => (
           <div
             id="collections"
             className={index === currentIndex ? "active" : ""}
             onMouseOver={() => setActiveCollection(collection, index)}
-            onMouseOut={() => setActiveCollection(null, -1)}
-            onDoubleClick={() => navigate("..")}
+            onMouseOut={() => setActiveCollection(initialCollectionState, -1)}
             key={index}
           >
             {loader ? (
@@ -333,13 +391,21 @@ function CollectionsLibrary() {
               </div>
             ) : (
               <div>
-                {" "}
+                {/*---------- Image of Collection ----------*/}
                 <img
                   src={collection.imageURL}
                   alt={collection.title}
                   className="h-collection"
                 />
-                <p></p>
+                {/*---------- Link to Edit Collection ----------*/}
+                <Link to={collection.id}>
+                  <p
+                    data-bs-toggle="modal"
+                    data-bs-target="#editCModal"
+                    data-bs-backdrop="static"
+                  ></p>
+                </Link>
+                {/*---------- Details of Collection ----------*/}
                 <span>
                   <div>
                     <label>Title:</label> {collection.title}
@@ -347,7 +413,88 @@ function CollectionsLibrary() {
                   <div>
                     <label>Description:</label> {collection.description}
                   </div>
+                  <br></br>
+                  <div>
+                    <h6>click to edit</h6>
+                  </div>
                 </span>
+                {/*---------- Routing to Edit Collection Modal ----------*/}
+                <Routes>
+                  <Route
+                    path={`:${collection.id}`}
+                    element={
+                      <div
+                        className="modal fade"
+                        id="editCModal"
+                        tabIndex="-1"
+                        aria-labelledby="editCModalLabel"
+                        aria-hidden="true"
+                      >
+                        <div className="modal-dialog modal-dialog-scrollable">
+                          <div className="modal-content bg-modal-content border-0">
+                            <div className="modal-header bg-modal-header border-0 shadow-sm">
+                              <h1
+                                className="modal-title fs-5"
+                                id="editCModalLabel"
+                              >
+                                {collection.title}
+                              </h1>
+                              <button
+                                type="button"
+                                className="btn-close btn-close-white"
+                                data-bs-dismiss="modal"
+                                aria-label="Close"
+                              ></button>
+                            </div>
+                            <div className="modal-body">
+                              <div className="form-group">
+                                <label htmlFor="title">Title*</label>
+                                <input
+                                  type="text"
+                                  className="form-control"
+                                  id="title"
+                                  required
+                                  placeholder={collection.title}
+                                  onChange={handleInputChangeCurrent}
+                                  name="title"
+                                />
+                              </div>
+                              <div className="form-group">
+                                <label htmlFor="description">Description</label>
+                                <input
+                                  type="text"
+                                  className="form-control"
+                                  id="description"
+                                  placeholder={collection.description}
+                                  onChange={handleInputChangeCurrent}
+                                  name="description"
+                                />
+                              </div>
+                            </div>
+                            <div className="modal-footer">
+                              <button
+                                type="button"
+                                className="btn button"
+                                data-bs-dismiss="modal"
+                                onClick={updateCollection}
+                              >
+                                Update
+                              </button>
+                              <button
+                                type="button"
+                                className="btn button"
+                                data-bs-dismiss="modal"
+                                onClick={deleteCollection}
+                              >
+                                Delete
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    }
+                  />
+                </Routes>
               </div>
             )}
           </div>
@@ -355,6 +502,6 @@ function CollectionsLibrary() {
       </div>
     </div>
   );
-};
+}
 
 export default CollectionsLibrary;
