@@ -1,14 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { Link, Route, Routes, useNavigate } from "react-router-dom";
+import { Link, Route, Routes, useLocation, useNavigate } from "react-router-dom";
 import Dropzone from "react-dropzone-uploader";
 import { getDroppedOrSelectedFiles } from "html5-file-selector";
 // Firebase
-import {
-  deleteObject,
-  getDownloadURL,
-  ref,
-  uploadBytes,
-} from "firebase/storage";
+import { deleteObject, getDownloadURL, ref, uploadBytes } from "firebase/storage";
 // CSS
 import "react-dropzone-uploader/dist/styles.css";
 import "../../../../assets/css/Artwork.scss";
@@ -20,6 +15,8 @@ import Plus from "../../../../assets/img/plus-icon.png";
 
 function ArtworksLibrary() {
   let navigate = useNavigate();
+  let location = useLocation();
+  const state = location.state;
   const initialArtworkState = {
     id: null,
     artist: "",
@@ -38,6 +35,11 @@ function ArtworksLibrary() {
   //const [editArtwork, setEditArtwork] = useState(false);
   //const [message, setMessage] = useState("");
 
+  // display all Artworks
+  useEffect(() => {
+    retrieveArtworks();
+  }, []);
+
   // retrieve all Artworks
   const retrieveArtworks = () => {
     ArtworkService.getAll()
@@ -49,11 +51,6 @@ function ArtworksLibrary() {
         console.log("Error while retrieving all the artworks:", err);
       });
   };
-
-  // display all Artworks
-  useEffect(() => {
-    retrieveArtworks();
-  }, []);
 
   // refresh Artworks Library
   const refreshLibrary = () => {
@@ -187,6 +184,8 @@ function ArtworksLibrary() {
 
   // update an Artwork by id
   const updateArtwork = () => {
+    currentArtwork.id = state.id;
+    currentArtwork.imageURL = state.imageURL;
     ArtworkService.update(currentArtwork.id, currentArtwork)
       .then((res) => {
         console.log(res.data);
@@ -201,6 +200,8 @@ function ArtworksLibrary() {
   // delete an Artwork by id
   const deleteArtwork = () => {
     setLoader(true);
+    currentArtwork.id = state.id;
+    currentArtwork.imageURL = state.imageURL;
     const imageRef = ref(FirebaseService.storage, currentArtwork.imageURL);
     deleteObject(imageRef)
       .then(() => {
@@ -421,6 +422,7 @@ function ArtworksLibrary() {
             className={index === currentIndex ? "active" : ""}
             onMouseOver={() => setActiveArtwork(artwork, index)}
             onMouseOut={() => setActiveArtwork(initialArtworkState, -1)}
+            onClick={() => setActiveArtwork(artwork, index)}
             key={index}
           >
             {loader ? (
@@ -438,7 +440,7 @@ function ArtworksLibrary() {
                   className="h-artwork"
                 />
                 {/*---------- Link to Edit Artwork ----------*/}
-                <Link to={artwork.id}>
+                <Link to={artwork.id} state={artwork} >
                   <p
                     data-bs-toggle="modal"
                     data-bs-target="#editModal"
@@ -447,6 +449,9 @@ function ArtworksLibrary() {
                 </Link>
                 {/*---------- Details of Artwork ----------*/}
                 <span>
+                  <div>
+                    <label>Id:</label> {artwork.id}
+                  </div>
                   <div>
                     <label>Title:</label> {artwork.title}
                   </div>
@@ -503,7 +508,7 @@ function ArtworksLibrary() {
                                   className="form-control"
                                   id="title"
                                   required
-                                  placeholder={artwork.title}
+                                  //placeholder={(state.title == null) ? state.title : "Title"}
                                   onChange={handleInputChangeCurrent}
                                   name="title"
                                 />
@@ -514,7 +519,7 @@ function ArtworksLibrary() {
                                   type="text"
                                   className="form-control"
                                   id="description"
-                                  placeholder={artwork.description}
+                                  //placeholder={(state.description == null) ? state.description : "Description"}
                                   onChange={handleInputChangeCurrent}
                                   name="description"
                                 />
@@ -525,7 +530,7 @@ function ArtworksLibrary() {
                                   type="text"
                                   className="form-control"
                                   id="artist"
-                                  placeholder={artwork.artist}
+                                  //placeholder={(state.artist == null) ? state.artist : "Artist"}
                                   onChange={handleInputChangeCurrent}
                                   name="artist"
                                 />
@@ -536,7 +541,7 @@ function ArtworksLibrary() {
                                   type="text"
                                   className="form-control"
                                   id="year"
-                                  placeholder={artwork.year}
+                                  //placeholder={(state.year == null) ? state.year : "Year"}
                                   onChange={handleInputChangeCurrent}
                                   name="year"
                                 />
@@ -547,7 +552,7 @@ function ArtworksLibrary() {
                                   type="text"
                                   className="form-control"
                                   id="collection"
-                                  placeholder={artwork.category}
+                                  //placeholder={(state.category == null) ? state.category : "Category"}
                                   onChange={handleInputChangeCurrent}
                                   name="category"
                                 />
@@ -584,6 +589,6 @@ function ArtworksLibrary() {
       </div>
     </div>
   );
-}
+};
 
 export default ArtworksLibrary;

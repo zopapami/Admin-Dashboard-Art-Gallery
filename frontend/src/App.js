@@ -17,6 +17,6 @@ function App() {
       <Route path="admin/*" element={<Login />}></Route>
     </Routes>
   );
-}
+};
 
 export default App;
