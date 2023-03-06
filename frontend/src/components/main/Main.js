@@ -4,9 +4,8 @@ import "../../assets/css/Main.scss";
 
 function Main() {
   return (
-    <div className="h100 bg-main">
-    </div>
+    <div className="h100 bg-main"></div>
   );
-}
+};
 
 export default Main;

@@ -2,6 +2,14 @@
 .bg-dashboard {
   background: linear-gradient(#2A2A31, #373741);
 }
+/*
+.bg-routes {
+  background-image: linear-gradient(rgba(255,255,255,0.5), rgba(255,255,255,0.5)), url("../img/dashboard-bg.jpg");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+*/
 .grid-dashboard {
   display: grid;
   grid-template-columns: 1fr 9fr;

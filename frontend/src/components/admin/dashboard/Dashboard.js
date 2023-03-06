@@ -46,12 +46,12 @@ function Dashboard() {
           </Link>
         </li>
         <li className="nav-item" onClick={handleLogout}>
-          <Link to=".." className="nav-link navbar-text">
+          <Link to=".." className="nav-link txt-navbar">
             LOGOUT
           </Link>
         </li>
       </nav>
-      <div>
+      <div className="bg-routes">
         <Routes>
           <Route path="home" element={<Home />} />
           <Route path="gallery/*" element={<Gallery />} />
