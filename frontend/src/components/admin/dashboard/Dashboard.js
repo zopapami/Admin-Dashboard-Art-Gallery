@@ -10,6 +10,8 @@ import FirebaseService from "../../../services/firebase-service.js";
 import Home from "../dashboard/Home.js";
 import Gallery from "../dashboard/Gallery.js";
 import Info from "../dashboard/Info.js";
+// Images
+import Logo from "../../../assets/img/logo_tcg-05.png";
 
 function Dashboard() {
   // Logout
@@ -28,7 +30,9 @@ function Dashboard() {
     <div className="grid-dashboard h100">
       <nav className="navbar-nav navbar-dark bg-dashboard mr-auto p-4">
         <li className="nav-item">
-          <p className="navbar-text">DASHBOARD</p>
+          <p className="navbar-text">
+            <img src={Logo} alt="DASHBOARD" width="100" />
+          </p>
         </li>
         <li className="nav-item">
           <Link to="home" className="navbar-brand nav-link navbar-text">
@@ -60,6 +64,6 @@ function Dashboard() {
       </div>
     </div>
   );
-}
+};
 
 export default Dashboard;

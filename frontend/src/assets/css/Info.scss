@@ -2,6 +2,10 @@
 @use "./Scrollbars.scss";
 
 /* ---------------------------------------------------------------------- */
+.bg-off-white {
+  background-color: #F1F1F4;
+  border: none;
+}
 .w-form {
   min-width: 280px;
   max-width: 480px;

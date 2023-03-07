@@ -74,7 +74,7 @@ function Login() {
                     <img className="size" src={LoginPicture} alt="login-pic" />
                   </div>
                   <div className="flip-card-back">
-                    <h2 className="heading">WELCOME BACK!</h2>
+                    <h2 className="heading">WELCOME BACK !</h2>
                     <form>
                       <div className="m-3 form-group">
                         <label className="mb-1" htmlFor="email">

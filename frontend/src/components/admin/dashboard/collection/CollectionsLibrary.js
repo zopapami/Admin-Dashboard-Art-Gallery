@@ -1,14 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { Link, Route, Routes, useNavigate } from "react-router-dom";
+import { Link, Route, Routes, useLocation, useNavigate } from "react-router-dom";
 import Dropzone from "react-dropzone-uploader";
 import { getDroppedOrSelectedFiles } from "html5-file-selector";
 // Firebase
-import {
-  deleteObject,
-  getDownloadURL,
-  ref,
-  uploadBytes,
-} from "firebase/storage";
+import { deleteObject, getDownloadURL, ref, uploadBytes } from "firebase/storage";
 // CSS
 import "react-dropzone-uploader/dist/styles.css";
 import "../../../../assets/css/Collection.scss";
@@ -20,6 +15,8 @@ import Plus from "../../../../assets/img/plus-icon.png";
 
 function CollectionsLibrary() {
   let navigate = useNavigate();
+  let location = useLocation();
+  const state = location.state;
   const initialCollectionState = {
     id: null,
     description: "",
@@ -35,6 +32,11 @@ function CollectionsLibrary() {
   //const [editCollection, setEditCollection] = useState(false);
   //const [message, setMessage] = useState("");
 
+  // display all Collections
+  useEffect(() => {
+    retrieveCollections();
+  }, []);
+
   // retrieve all Collections
   const retrieveCollections = () => {
     CollectionService.getAll()
@@ -46,11 +48,6 @@ function CollectionsLibrary() {
         console.log("Error while retrieving all the collections:", err);
       });
   };
-
-  // display all Collections
-  useEffect(() => {
-    retrieveCollections();
-  }, []);
 
   // refresh Collections Library
   const refreshLibrary = () => {
@@ -181,10 +178,13 @@ function CollectionsLibrary() {
 
   // update an Collection by id
   const updateCollection = () => {
+    currentCollection.id = state.id;
+    currentCollection.imageURL = state.imageURL;
     CollectionService.update(currentCollection.id, currentCollection)
       .then((res) => {
         console.log(res.data);
         //setMessage("The Collection was updated successfully!");
+        refreshLibrary();
       })
       .catch((err) => {
         console.log("Error while updating the Collection:", err);
@@ -194,6 +194,8 @@ function CollectionsLibrary() {
   // delete an Collection by id
   const deleteCollection = () => {
     setLoader(true);
+    currentCollection.id = state.id;
+    currentCollection.imageURL = state.imageURL;
     const imageRef = ref(FirebaseService.storage, currentCollection.imageURL);
     deleteObject(imageRef)
       .then(() => {
@@ -297,7 +299,7 @@ function CollectionsLibrary() {
         {/*---------- Add Collection ----------*/}
         <button
           type="button"
-          className="btn button size-button-180"
+          className="btn button size-button-130"
           data-bs-toggle="modal"
           data-bs-target="#exampleCModal"
         >
@@ -381,6 +383,7 @@ function CollectionsLibrary() {
             className={index === currentIndex ? "active" : ""}
             onMouseOver={() => setActiveCollection(collection, index)}
             onMouseOut={() => setActiveCollection(initialCollectionState, -1)}
+            onClick={() => setActiveCollection(collection, index)}
             key={index}
           >
             {loader ? (
@@ -398,7 +401,7 @@ function CollectionsLibrary() {
                   className="h-collection"
                 />
                 {/*---------- Link to Edit Collection ----------*/}
-                <Link to={collection.id}>
+                <Link to={collection.id} state={collection} >
                   <p
                     data-bs-toggle="modal"
                     data-bs-target="#editCModal"
@@ -437,7 +440,7 @@ function CollectionsLibrary() {
                                 className="modal-title fs-5"
                                 id="editCModalLabel"
                               >
-                                {collection.title}
+                                Edit Collection
                               </h1>
                               <button
                                 type="button"
@@ -454,7 +457,7 @@ function CollectionsLibrary() {
                                   className="form-control"
                                   id="title"
                                   required
-                                  placeholder={collection.title}
+                                  //placeholder={(state.title == null) ? state.title : "Title"}
                                   onChange={handleInputChangeCurrent}
                                   name="title"
                                 />
@@ -465,7 +468,7 @@ function CollectionsLibrary() {
                                   type="text"
                                   className="form-control"
                                   id="description"
-                                  placeholder={collection.description}
+                                  //placeholder={(state.description == null) ? state.description : "Description"}
                                   onChange={handleInputChangeCurrent}
                                   name="description"
                                 />
@@ -478,7 +481,7 @@ function CollectionsLibrary() {
                                 data-bs-dismiss="modal"
                                 onClick={updateCollection}
                               >
-                                Update
+                                Save Changes
                               </button>
                               <button
                                 type="button"
@@ -502,6 +505,6 @@ function CollectionsLibrary() {
       </div>
     </div>
   );
-}
+};
 
 export default CollectionsLibrary;

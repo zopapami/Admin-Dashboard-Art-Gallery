@@ -450,9 +450,6 @@ function ArtworksLibrary() {
                 {/*---------- Details of Artwork ----------*/}
                 <span>
                   <div>
-                    <label>Id:</label> {artwork.id}
-                  </div>
-                  <div>
                     <label>Title:</label> {artwork.title}
                   </div>
                   <div>
@@ -565,7 +562,7 @@ function ArtworksLibrary() {
                                 data-bs-dismiss="modal"
                                 onClick={updateArtwork}
                               >
-                                Update
+                                Save Changes
                               </button>
                               <button
                                 type="button"

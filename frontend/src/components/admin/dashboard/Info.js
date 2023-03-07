@@ -17,24 +17,24 @@ function Info() {
     name: "",
     phone: "",
   };
-  let [information, setInformation] = useState([]);
-  let [info, setInfo] = useState(initialInfoState);
-  let [currentInfo, setCurrentInfo] = useState(initialInfoState);
-  //const [message, setMessage] = useState("");
+  const [info, setInfo] = useState(initialInfoState);
+  //let [information, setInformation] = useState([]);
+  //let [currentInfo, setCurrentInfo] = useState(initialInfoState);
+  const [message, setMessage] = useState("");
 
   useEffect(() => {
     retrieveInfo();
-  });
+  }, []);
 
   const retrieveInfo = () => {
     InfoService.getAll()
       .then((res) => {
-        information = res.data;
-        var info = information.find((item) => item.name === "");
+        //information = res.data;
+        //var info = information.find((item) => item.name === "");
         //info = information[0];
-        console.log("Info:", info);
         //console.log("Info:", Object.values(info)[5]);
-        console.log("Info:", info.instagram);
+        setInfo(res.data);
+        console.log("Info:", res.data);
       })
       .catch((err) => {
         console.log("Error while retrieving info:", err);
@@ -49,11 +49,11 @@ function Info() {
   };
 
   const updateInfo = () => {
-    //console.log("currentInfo:", currentInfo);
-    InfoService.update(currentInfo)
+    InfoService.update(info)
       .then((res) => {
+        setInfo(res.data);
         console.log(res.data);
-        //setMessage("Info was updated successfully!");
+        setMessage("Info was updated successfully!");
         refreshInfo();
       })
       .catch((err) => {
@@ -63,7 +63,8 @@ function Info() {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    currentInfo[name] = value;
+    setInfo({ ...info, [name]: value });
+    //currentInfo[name] = value;
     //setCurrentInfo({ ...currentInfo, [name]: value });
     //console.log("current", currentInfo);
   };
@@ -85,11 +86,10 @@ function Info() {
             <label className="mb-1" htmlFor="name">Display Name</label>
             <input
               type="text"
-              className="form-control"
+              className="form-control bg-off-white"
               id="name"
               name="name"
-              value={currentInfo.name}
-              placeholder={info.name}
+              value={info.name}
               onChange={handleInputChange}
             />
           </div>
@@ -97,11 +97,10 @@ function Info() {
             <label className="mb-1" htmlFor="email">Email Address</label>
             <input
               type="text"
-              className="form-control"
+              className="form-control bg-off-white"
               id="email"
               name="email"
-              value={currentInfo.email}
-              placeholder={info.email}
+              value={info.email}
               onChange={handleInputChange}
             />
           </div>
@@ -109,11 +108,10 @@ function Info() {
             <label className="mb-1" htmlFor="phone">Phone Number</label>
             <input
               type="text"
-              className="form-control"
+              className="form-control bg-off-white"
               id="phone"
               name="phone"
-              value={currentInfo.phone}
-              placeholder={info.phone}
+              value={info.phone}
               onChange={handleInputChange}
             />
           </div>
@@ -121,11 +119,10 @@ function Info() {
             <label className="mb-1" htmlFor="address">Gallery Address</label>
             <input
               type="text"
-              className="form-control"
+              className="form-control bg-off-white"
               id="address"
               name="address"
-              value={currentInfo.address}
-              placeholder={info.address}
+              value={info.address}
               onChange={handleInputChange}
             />
           </div>
@@ -133,11 +130,10 @@ function Info() {
             <label className="mb-1" htmlFor="facebook">Facebook</label>
             <input
               type="text"
-              className="form-control"
+              className="form-control bg-off-white"
               id="facebook"
               name="facebook"
-              value={currentInfo.facebook}
-              placeholder={info.facebook}
+              value={info.facebook}
               onChange={handleInputChange}
             />
           </div>
@@ -145,23 +141,10 @@ function Info() {
             <label className="mb-1" htmlFor="instagram">Instagram</label>
             <input
               type="text"
-              className="form-control"
+              className="form-control bg-off-white"
               id="instagram"
               name="instagram"
-              value={currentInfo.instagram}
-              placeholder={info.instagram}
-              onChange={handleInputChange}
-            />
-          </div>
-          <div className="m-3 form-group">
-            <label className="mb-1" htmlFor="imageURL">Profile Image</label>
-            <input
-              type="text"
-              className="form-control"
-              id="imageURL"
-              name="imageURL"
-              value={currentInfo.imageURL}
-              placeholder={info.imageURL}
+              value={info.instagram}
               onChange={handleInputChange}
             />
           </div>
@@ -169,11 +152,10 @@ function Info() {
             <label className="mb-1" htmlFor="bio">Bio</label>
             <input
               type="text"
-              className="form-control"
+              className="form-control bg-off-white"
               id="bio"
               name="bio"
-              value={currentInfo.bio}
-              placeholder={info.bio}
+              value={info.bio}
               onChange={handleInputChange}
             />
           </div>
@@ -184,12 +166,23 @@ function Info() {
           </div>
         </form>
       </div>
+      <p className="float-end">{message}</p>
     </div>
   );
-}
+};
 
 export default Info;
 
 /*
-<p className="float-end">{message}</p>
+          <div className="m-3 form-group">
+            <label className="mb-1" htmlFor="imageURL">Profile Image</label>
+            <input
+              type="text"
+              className="form-control bg-off-white"
+              id="imageURL"
+              name="imageURL"
+              value={info.imageURL}
+              onChange={handleInputChange}
+            />
+          </div>
 */
