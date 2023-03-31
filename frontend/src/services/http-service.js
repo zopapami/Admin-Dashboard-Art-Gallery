@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const admin = axios.create({
-  baseURL: "http://localhost:9090/admin/dashboard/",
+  baseURL: "http://localhost:9090/dashboard/",
   headers: { "Content-type": "application/json" }
 });
 

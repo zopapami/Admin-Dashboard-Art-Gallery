@@ -8,5 +8,5 @@ module.exports = app => {
   // update Info
   router.put("/", info.update);
 
-  app.use("/admin/dashboard/info", router);
+  app.use("/dashboard/info", router);
 };

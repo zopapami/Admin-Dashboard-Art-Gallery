@@ -20,5 +20,5 @@ module.exports = app => {
   // delete all Artworks
   router.delete("/", artworks.deleteAll);
 
-  app.use("/admin/dashboard/gallery/artworks", router);
+  app.use("/dashboard/gallery/artworks", router);
 };
