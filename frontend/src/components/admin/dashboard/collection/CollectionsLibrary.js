@@ -299,7 +299,7 @@ function CollectionsLibrary() {
         {/*---------- Add Collection ----------*/}
         <button
           type="button"
-          className="btn button size-button-130"
+          className="btn button size-button-180"
           data-bs-toggle="modal"
           data-bs-target="#exampleCModal"
         >
